@@ -92,6 +92,19 @@
         ::-webkit-scrollbar-thumb:hover {
             background: #eab308;
         }
+
+        /* Mobile / Touch Improvements */
+        * {
+            -webkit-tap-highlight-color: transparent;
+        }
+        @media (max-width: 480px) {
+            input, select, textarea {
+                font-size: 16px !important; /* stops iOS auto-zoom on focus */
+            }
+            main {
+                padding-bottom: calc(5rem + env(safe-area-inset-bottom));
+            }
+        }
     </style>
 </head>
 <body class="text-amber-50 font-sans antialiased selection:bg-gold-500 selection:text-royal-950">
@@ -688,7 +701,7 @@
 
         // ---------- ACTION BUTTONS PER PLAYER ----------
         function actionButtonsHTML(p, idx) {
-            const bb = 'px-2.5 py-1.5 rounded-lg text-xs font-bold transition border disabled:opacity-40 disabled:cursor-not-allowed';
+            const bb = 'px-3 py-2 rounded-lg text-xs font-bold transition border disabled:opacity-40 disabled:cursor-not-allowed';
             if (!tableState.handActive) {
                 return `<span class="text-[11px] text-amber-200/50 italic">Hand over — press Start Hand to deal the next one.</span>`;
             }

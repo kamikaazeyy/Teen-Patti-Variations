@@ -146,6 +146,19 @@
         ::-webkit-scrollbar-thumb:hover {
             background: #eab308;
         }
+
+        /* Mobile / Touch Improvements */
+        * {
+            -webkit-tap-highlight-color: transparent;
+        }
+        @media (max-width: 480px) {
+            input, select, textarea {
+                font-size: 16px !important; /* stops iOS auto-zoom on focus */
+            }
+            main {
+                padding-bottom: calc(5rem + env(safe-area-inset-bottom));
+            }
+        }
     </style>
 </head>
 <body class="text-amber-50 font-sans antialiased selection:bg-gold-500 selection:text-royal-950">
@@ -226,7 +239,10 @@
             <!-- Category Filter Pills -->
             <div class="flex items-center gap-2 overflow-x-auto pb-1 md:pb-0 no-scrollbar" id="categoryTabs">
                 <button onclick="setCategory('all')" data-cat="all" class="cat-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-bold whitespace-nowrap transition-all bg-gold-400 text-royal-950 shadow-md">
-                    All Variations (12)
+                    All Variations (24)
+                </button>
+                <button onclick="setCategory('Classic')" data-cat="Classic" class="cat-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold whitespace-nowrap transition-all bg-royal-800/70 text-amber-100/80 hover:bg-royal-700 hover:text-white border border-white/10">
+                    <i class="fa-solid fa-gem text-gold-400 mr-1.5"></i>Classic
                 </button>
                 <button onclick="setCategory('Joker')" data-cat="Joker" class="cat-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold whitespace-nowrap transition-all bg-royal-800/70 text-amber-100/80 hover:bg-royal-700 hover:text-white border border-white/10">
                     <i class="fa-solid fa-wand-magic-sparkles text-gold-400 mr-1.5"></i>Joker Variations
@@ -504,6 +520,30 @@
         // VARIATIONS DATABASE (10 Complete Variations)
         // ==========================================
         const variationsData = [
+            {
+                id: 'classic',
+                name: 'Classic Teen Patti',
+                tagline: 'The Original Game — No Jokers, Pure Skill & Bluff',
+                category: 'Classic',
+                chaosLevel: 'Standard',
+                cardsDealt: '3 Cards (Face Down)',
+                jokers: 'None — Pure Teen Patti',
+                shortDesc: 'The original Diwali taash game: 3 cards each, no jokers, standard rankings. Pure bluff, nerve, and reading the table.',
+                rules: [
+                    'Collect the boot, then deal 3 cards face down to each player.',
+                    'NO jokers or wild cards — hands rank purely on the standard table: Trail > Pure Sequence > Sequence > Color > Pair > High Card.',
+                    'Bet Blind (1x stake) or look at your cards and play Chaal (2x stake).',
+                    'Sideshow, Show, and Pack all follow the standard rules.'
+                ],
+                exampleHand: [
+                    { rank: 'A', suit: '♥', isJoker: false, note: 'Natural' },
+                    { rank: 'K', suit: '♥', isJoker: false, note: 'Natural' },
+                    { rank: 'Q', suit: '♥', isJoker: false, note: 'Natural' }
+                ],
+                exampleHeading: 'Result: A♥ K♥ Q♥ Pure Sequence',
+                exampleExplanation: 'No jokers needed — this is a natural Pure Sequence, the second-strongest hand in Classic Teen Patti (only a Trail beats it).',
+                proTip: 'With no jokers in play, Pairs and even High Card hands win far more often — Classic rewards reading the table over holding monster hands.'
+            },
             {
                 id: 'ak47',
                 name: 'AK-47',
@@ -803,7 +843,285 @@
                 exampleHeading: 'Result: Trail of Aces (Drop 9♠ & 4♣)',
                 exampleExplanation: 'Out of the 5 cards dealt to you, you keep the three Aces and discard the 9♠ and 4♣ to table an unbeatable Trail of Aces.',
                 proTip: 'If you have more than 9 players at your Diwali party, play 4-Card Discard instead so the 52-card deck doesn’t run out!'
+            },
+            {
+                id: 'highest-card-joker',
+                name: 'Highest Card Joker',
+                tagline: 'Your Best Card Works for the Rest',
+                category: 'Joker',
+                chaosLevel: 'Strategic',
+                cardsDealt: '3 Cards (Face Down)',
+                jokers: 'Whichever card is the highest rank in YOUR hand',
+                shortDesc: 'Every player gets a guaranteed Joker! The highest-ranked card in your own 3-card hand becomes wild.',
+                rules: [
+                    'Deal 3 cards face down to each player.',
+                    'The highest-ranked card in YOUR hand automatically becomes your personal joker (Ace highest, 2 lowest).',
+                    'Because your top card transforms to help your lower cards, natural high Trails are tougher — an Ace with 9♠ 9♥ becomes a Trail of Nines, not Aces.',
+                    'Tied highs (e.g., K♠ K♥ 5♦) → BOTH Kings become jokers → Trail of Kings!'
+                ],
+                exampleHand: [
+                    { rank: '9', suit: '♠', isJoker: false, note: 'Mid' },
+                    { rank: '9', suit: '♥', isJoker: false, note: 'Mid' },
+                    { rank: 'A', suit: '♦', isJoker: true, note: 'Highest = Wild!' }
+                ],
+                exampleHeading: 'Result: Trail of Nines (9-9-9)',
+                exampleExplanation: 'Between 9♠, 9♥ and A♦, the Ace is your highest card — it goes wild and matches your pair of Nines into a Trail of Nines!',
+                proTip: 'Holding a lone Ace? It becomes your joker automatically — pair it with any two matching low cards and you have a Trail!'
+            },
+            {
+                id: 'king-little',
+                name: 'King Little',
+                tagline: 'Lowest Wild + Royal Jokers in One Hand',
+                category: 'Joker',
+                chaosLevel: 'High Action',
+                cardsDealt: '3 Cards (Face Down)',
+                jokers: 'Lowest card in YOUR hand + all 4 Kings',
+                shortDesc: 'Double joker madness — your lowest card is wild AND every King in the deck is a universal joker.',
+                rules: [
+                    'Deal 3 cards face down.',
+                    'Dual joker rule: the lowest-ranked card in YOUR personal hand is wild, PLUS all 4 Kings in the deck are universal jokers for everyone.',
+                    'Holding a King alongside two lower cards gives you at least two jokers right out of the gate.',
+                    'Optional house rotation: swap Kings for Queens ("Queen Little") or Jacks ("Jack Little").'
+                ],
+                exampleHand: [
+                    { rank: 'K', suit: '♠', isJoker: true, note: 'King Joker' },
+                    { rank: '3', suit: '♥', isJoker: true, note: 'Lowest = Wild' },
+                    { rank: '9', suit: '♦', isJoker: false, note: 'Natural' }
+                ],
+                exampleHeading: 'Result: Trail of Nines (9-9-9)',
+                exampleExplanation: 'K♠ is a universal joker AND 3♥ is your lowest card — both turn into Nines to match your 9♦ for a Trail!',
+                proTip: 'A King plus your lowest card means you start every hand with at least two wild cards — Trails become routine.'
+            },
+            {
+                id: 'lallan-kallan',
+                name: 'Lallan Kallan (Odd Color Out)',
+                tagline: 'Your Odd-Colored Card is the Joker',
+                category: 'Joker',
+                chaosLevel: 'High Action',
+                cardsDealt: '3 Cards (Face Down)',
+                jokers: 'The single opposite-color card in your hand',
+                shortDesc: 'Two blacks and a red? The red is wild. Two reds and a black? The black is wild. Simple, visual, chaotic.',
+                rules: [
+                    'Deal 3 cards face down.',
+                    'Look at the colors (Red vs. Black) in your hand: the single card of the odd color out becomes your personal joker.',
+                    'Two Black + One Red = the Red card ("Lallan") is wild; Two Red + One Black = the Black card ("Kallan") is wild.',
+                    'Three cards of the exact same color (all Red or all Black) = no joker in hand (or instant Bust under strict house rules).'
+                ],
+                exampleHand: [
+                    { rank: '9', suit: '♠', isJoker: false, note: 'Black' },
+                    { rank: 'Q', suit: '♠', isJoker: false, note: 'Black' },
+                    { rank: '5', suit: '♥', isJoker: true, note: 'Lallan = Wild!' }
+                ],
+                exampleHeading: 'Result: 5♥ Becomes the Wild Joker',
+                exampleExplanation: 'Two black cards and one red — the odd color out (5♥, the "Lallan") transforms into whatever completes your best hand!',
+                proTip: 'If all three of your cards share one color you get NO joker — agree before the deal whether that means a busted hand or just a natural one.'
+            },
+            {
+                id: 'add-up-joker',
+                name: 'Add-Up Get Joker (Sum Joker)',
+                tagline: 'Two Cards That Add Up Merge Into a Joker',
+                category: 'Joker',
+                chaosLevel: 'Strategic',
+                cardsDealt: '4 Private Cards + 1 Center Target Card',
+                jokers: 'Any 2 cards summing to the center target rank',
+                shortDesc: 'A target card sits in the center — find two cards in your hand that add up to it and they fuse into a wild Joker.',
+                rules: [
+                    'Deal 4 private cards to each player and flip 1 Target Card face-up in the center.',
+                    'Any two cards in your hand whose numerical values add up to the center card\'s rank fuse together into a single Joker (making a 3-card final hand).',
+                    'Card values: Ace = 1, 2–10 = face value, J = 11, Q = 12, K = 13 (e.g., center is 9 → your 4 and 5 merge into 1 Joker).',
+                    'If no two cards in your hand add up to the target, discard any 1 card and play your best natural 3-card hand.'
+                ],
+                centerCard: { rank: '9', suit: '♠', isJoker: false, note: 'Target' },
+                exampleHand: [
+                    { rank: '4', suit: '♥', isJoker: true, note: 'Merge' },
+                    { rank: '5', suit: '♦', isJoker: true, note: 'Merge' },
+                    { rank: 'A', suit: '♠', isJoker: false, note: 'Keep' },
+                    { rank: '8', suit: '♣', isJoker: false, isDiscarded: true, note: 'Drop' }
+                ],
+                exampleHeading: 'Result: 4♥ + 5♦ Fuse Into a Joker',
+                exampleExplanation: 'The center target is 9 — your 4♥ and 5♦ add up to 9, so they merge into a single wild Joker alongside your A♠ (and you drop the spare 8♣)!',
+                proTip: 'Check every pair combination in your 4 cards — even a weak pair of low cards becomes gold when it sums to the target.'
+            },
+            {
+                id: 'in-between-jokers',
+                name: 'In-Between Jokers',
+                tagline: 'Two Center Cards Frame the Wild Zone',
+                category: 'Joker',
+                chaosLevel: 'High Action',
+                cardsDealt: '3 Private Cards + 2 Open Center Cards',
+                jokers: 'All ranks strictly between the two center cards',
+                shortDesc: 'Two open cards in the middle create a wild zone — every rank between them is a joker for the whole table.',
+                rules: [
+                    'Deal 3 private cards face down, then open 2 Community Cards face-up in the center.',
+                    'Every rank strictly BETWEEN the two open center cards becomes a universal joker for the table (e.g., 4 and 8 open → all 5s, 6s, and 7s are wild).',
+                    'The two open boundary cards themselves remain natural.',
+                    'If the two center cards are consecutive (e.g., 7 and 8) or a pair (e.g., 10 and 10), the round plays as Classic with zero jokers.'
+                ],
+                centerCard: [
+                    { rank: '4', suit: '♠', isJoker: false, note: 'Boundary' },
+                    { rank: '8', suit: '♦', isJoker: false, note: 'Boundary' }
+                ],
+                exampleHand: [
+                    { rank: '6', suit: '♥', isJoker: true, note: 'In-Between!' },
+                    { rank: '7', suit: '♠', isJoker: true, note: 'In-Between!' },
+                    { rank: 'K', suit: '♣', isJoker: false, note: 'Natural' }
+                ],
+                exampleHeading: 'Result: Trail of Kings (K-K-K)',
+                exampleExplanation: 'With 4 and 8 open in the center, all 5s, 6s, and 7s are wild. Your 6♥ and 7♠ both transform into Kings for a Trail!',
+                proTip: 'The wider the gap between the two center cards, the more jokers flood the table — a 2-and-Ace opening makes almost everything wild!'
+            },
+            {
+                id: 'pack-jack',
+                name: 'Pack Jack (Zandu)',
+                tagline: 'Folding Changes the Jokers Mid-Hand',
+                category: 'Joker',
+                chaosLevel: 'Extreme Chaos',
+                cardsDealt: '3 Private Cards + 3 Center Jokers',
+                jokers: '3 center ranks — replaced every time someone packs',
+                shortDesc: 'The table\'s jokers live in the center — and every player who packs overwrites them with their own folded cards.',
+                rules: [
+                    'Deal 3 private cards to each player and place 3 initial Joker cards face-up in the center.',
+                    'Standard betting begins with those 3 center ranks acting as universal jokers.',
+                    'Dynamic twist: whenever a player Packs (folds), they must place their 3 folded cards face-up on top of the center cards — immediately replacing the active jokers for everyone still in the pot.',
+                    'A hand that starts as a monster can lose its jokers mid-pot the moment someone folds.'
+                ],
+                centerCard: [
+                    { rank: '5', suit: '♠', isJoker: true, note: 'Joker' },
+                    { rank: 'Q', suit: '♥', isJoker: true, note: 'Joker' },
+                    { rank: '9', suit: '♣', isJoker: true, note: 'Joker' }
+                ],
+                exampleHand: [
+                    { rank: '5', suit: '♥', isJoker: true, note: 'Matches' },
+                    { rank: 'Q', suit: '♦', isJoker: true, note: 'Matches' },
+                    { rank: '9', suit: '♠', isJoker: true, note: 'Matches' }
+                ],
+                exampleHeading: 'Result: Trail of Aces (A-A-A)',
+                exampleExplanation: 'All three of your cards match the center joker ranks (5, Q, 9) — three wild jokers instantly form a Trail of Aces! But one fold could swap these jokers away...',
+                proTip: 'Watch who looks ready to fold — their discarded cards rewrite the joker list, and your monster hand can evaporate mid-pot.'
+            },
+            {
+                id: 'temperature',
+                name: 'Temperature (High-Low Flip)',
+                tagline: 'One Card Decides: High Wins or Low Wins',
+                category: 'Mind Twist',
+                chaosLevel: 'Mind Bender',
+                cardsDealt: '3 Private Cards + 1 Temperature Card',
+                jokers: 'None — the center card flips the rules',
+                shortDesc: 'A center card sets the weather — low (A–6) plays Muflis, high (7–K) plays Classic, and every fold draws a new temperature.',
+                rules: [
+                    'Deal 3 cards face down and flip 1 "Temperature Card" face-up in the center.',
+                    'Low Temperature (Ace through 6): the round is played as Muflis (lowest hand wins).',
+                    'High Temperature (7 through King): the round is played as Classic (highest hand wins).',
+                    'Dynamic twist: every time a player Packs (folds), draw a new Temperature Card onto the center pile — potentially flipping the winning condition mid-pot.'
+                ],
+                centerCard: { rank: '3', suit: '♥', isJoker: false, note: 'Low = Muflis' },
+                exampleHand: [
+                    { rank: '2', suit: '♠', isJoker: true, note: 'Lowest' },
+                    { rank: '3', suit: '♦', isJoker: true, note: 'Mixed' },
+                    { rank: '5', suit: '♣', isJoker: true, note: 'No Run!' }
+                ],
+                exampleHeading: 'Result: 2-3-5 Off-Suit Wins (Muflis Mode)',
+                exampleExplanation: 'The Temperature Card is a 3 — LOW! The hand plays as Muflis, so this ugly-looking 2-3-5 off-suit is actually the strongest possible hand.',
+                proTip: 'If the temperature flips mid-pot after a fold, yesterday\'s garbage becomes gold — never celebrate until the last card settles!'
+            },
+            {
+                id: '123-shopping',
+                name: '1-2-3 Shopping',
+                tagline: 'Pay to Swap Your Worst Card',
+                category: 'Extra & Community',
+                chaosLevel: 'Balanced Skill',
+                cardsDealt: '3 Cards + 3 Paid Swap Rounds',
+                jokers: 'None — paid card swaps instead',
+                shortDesc: 'Three shopping rounds before betting: pay 1, then 2, then 3 counters into the pot to swap out a bad card.',
+                rules: [
+                    'Deal 3 cards face down to each player.',
+                    'Before regular betting starts, run 3 consecutive "Shopping" rounds in turn order where players may pay counters into the pot to discard 1 unwanted card and draw a fresh one from the deck:',
+                    '• Round 1: costs 1 counter to swap 1 card',
+                    '• Round 2: costs 2 counters to swap 1 card',
+                    '• Round 3: costs 3 counters to swap 1 card',
+                    'Shopping is optional in every round — pass ("check") anytime you like your hand, then proceed to standard betting after Round 3.'
+                ],
+                exampleHand: [
+                    { rank: 'K', suit: '♠', isJoker: false, note: 'Keep' },
+                    { rank: 'K', suit: '♥', isJoker: false, note: 'Keep' },
+                    { rank: '2', suit: '♣', isJoker: false, isDiscarded: true, note: 'Swap ₹3' }
+                ],
+                exampleHeading: 'Result: Swapped 2♣ → Drew K♦ = Trail of Kings!',
+                exampleExplanation: 'You paid 3 counters in Round 3 to dump the 2♣ — the deck repays you with K♦, turning your pair into a Trail of Kings!',
+                proTip: 'Only shop when you\'re one card away from a monster — paying 6 total counters across all 3 rounds is rarely worth a marginal upgrade.'
+            },
+            {
+                id: 'auction',
+                name: 'Auction',
+                tagline: 'Bid Real Money for a Better Hand',
+                category: 'Extra & Community',
+                chaosLevel: 'High Action',
+                cardsDealt: '3 Private Cards + 2 Auction Hands',
+                jokers: 'None — buy a new hand instead',
+                shortDesc: 'Two mystery hands go under the hammer before betting — outbid the table to dump your cards and take theirs.',
+                rules: [
+                    'Deal 3 cards face down to each player, plus 2 extra 3-card "Auction Hands" in the center (each dealt with 2 cards face-down and 1 teaser card face-up).',
+                    'Before regular betting starts, the dealer auctions off the two center hands one by one to the highest bidder.',
+                    'Bidding proceeds go straight into the main pot; the winning bidder discards their original 3 cards into the muck and takes the auctioned hand.',
+                    'Once both hands are auctioned (or passed on), standard Blind/Chaal betting begins.'
+                ],
+                exampleHand: [
+                    { rank: 'J', suit: '♠', isJoker: false, isDiscarded: true, note: 'Dumped' },
+                    { rank: '4', suit: '♥', isJoker: false, isDiscarded: true, note: 'Dumped' },
+                    { rank: '8', suit: '♣', isJoker: false, isDiscarded: true, note: 'Dumped' }
+                ],
+                exampleHeading: 'Result: Sold! You Trade J-4-8 for the Auctioned Hand',
+                exampleExplanation: 'Your J-4-8 was going nowhere — you won the auction for ₹200 (straight into the pot) and swapped it for a mystery hand showing an A♥ teaser!',
+                proTip: 'Only one teaser card is visible — overpaying for a weak auction hand is the classic trap. Set your max bid before the hammer falls.'
+            },
+            {
+                id: 'stud',
+                name: 'Stud (One Card Exposed)',
+                tagline: 'Everyone Sees a Third of Your Hand',
+                category: 'Extra & Community',
+                chaosLevel: 'Mind Bender',
+                cardsDealt: '2 Face-Down + 1 Face-Up per Player',
+                jokers: 'None — pure information war',
+                shortDesc: 'One of your cards is face-up for the whole table — bluffing and chaal become a game of visible outs and blockers.',
+                rules: [
+                    'Deal each player 2 private cards face down and 1 exposed card face up on the table right in front of them.',
+                    'No jokers — standard Teen Patti hand rankings apply using all 3 of your cards.',
+                    'Every player can see one-third of every opponent\'s hand, turning Chaal betting and bluffing into a mind game based on visible outs and blockers.'
+                ],
+                exampleHand: [
+                    { rank: 'A', suit: '♠', isJoker: false, note: 'Face Down' },
+                    { rank: 'K', suit: '♥', isJoker: false, note: 'Face Down' },
+                    { rank: 'Q', suit: '♠', isJoker: true, note: 'Exposed' }
+                ],
+                exampleHeading: 'Result: A♠ K♥ Q♠ Hidden Sequence Threat',
+                exampleExplanation: 'The table only sees your Q♠ — they can\'t tell whether you\'re sitting on a Pure Sequence, a Pair, or complete garbage behind it.',
+                proTip: 'Watch every exposed card like a hawk — an exposed 4♦ tells you its owner can\'t have a high pair, and two exposed Hearts warn of a possible Flush.'
+            },
+            {
+                id: 'nine-nine-nine',
+                name: '999 (Closest to 999)',
+                tagline: 'Arrange Digits, Chase the Nines',
+                category: 'Mind Twist',
+                chaosLevel: 'High Tension',
+                cardsDealt: '3 Cards (Face Down)',
+                jokers: 'None — digits, not hands',
+                shortDesc: 'Trails and flushes mean nothing — arrange your 3 cards into the 3-digit number closest to 999.',
+                rules: [
+                    'Deal 3 cards face down — standard trails, sequences, and flushes do NOT count.',
+                    'Card digit values: Ace = 1, 2–9 = face value, and 10, J, Q, K = 0.',
+                    'Arrange your 3 cards in any order to form the highest 3-digit number closest to 999 (e.g., holding 9♠, 8♥, K♦ builds 980; three 9s = 999, the unbeatable nuts).',
+                    'Optional variation ("Closest to 555"): same digit rules, but the winner is whoever forms a 3-digit number closest to 555 above or below (554 and 556 tie and beat 560).'
+                ],
+                exampleHand: [
+                    { rank: '9', suit: '♠', isJoker: true, note: 'Digit 9' },
+                    { rank: '8', suit: '♥', isJoker: true, note: 'Digit 8' },
+                    { rank: 'K', suit: '♦', isJoker: true, note: 'Digit 0' }
+                ],
+                exampleHeading: 'Result: 980 — Within 19 of the Nuts!',
+                exampleExplanation: 'Arrange 9♠ 8♥ K♦ as 9-8-0 → 980 points! Only hands like 999, 998, or 989 beat you. A King is worthless in Classic but a golden zero-padder here.',
+                proTip: 'Face cards are your friends in 999 — K, Q, J, and 10 all pad the zeros. A hand of 9-9-K (990) crushes a natural Pure Sequence!'
             }
+
         ];
 
         // ==========================================
@@ -932,7 +1250,7 @@
                         </div>
 
                         <!-- Card Preview & Action Footer -->
-                        <div class="mt-5 pt-4 border-t border-white/10 flex items-center justify-between gap-2">
+                        <div class="mt-5 pt-4 border-t border-white/10 flex flex-wrap items-center justify-between gap-2">
                             <div class="flex items-center -space-x-2">
                                 ${previewCards}
                             </div>
@@ -982,10 +1300,13 @@
             const cardsContainer = document.getElementById('modalVisualCards');
             let cardsHtml = '';
             if (v.centerCard) {
+                const centers = [].concat(v.centerCard);
                 cardsHtml += `
                     <div class="w-full text-center">
-                        <div class="text-[10px] uppercase tracking-wider text-rose-400 font-bold mb-2">Middle Open Card</div>
-                        ${createCardHTML(v.centerCard, 'normal')}
+                        <div class="text-[10px] uppercase tracking-wider text-rose-400 font-bold mb-2">Middle Open Card${centers.length > 1 ? 's' : ''}</div>
+                        <div class="flex flex-wrap items-center justify-center gap-3 sm:gap-5">
+                            ${centers.map(c => createCardHTML(c, 'normal')).join('')}
+                        </div>
                     </div>`;
             }
             if (v.exampleHand2Label) {
