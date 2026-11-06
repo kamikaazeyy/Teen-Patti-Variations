@@ -1,0 +1,973 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Winnings Tracker • Shubh Diwali Teen Patti</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        display: ['"Cinzel Decorative"', 'serif'],
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                    },
+                    colors: {
+                        royal: {
+                            950: '#160408',
+                            900: '#28060e',
+                            800: '#420a17',
+                            700: '#611022',
+                        },
+                        felt: {
+                            900: '#071f15',
+                            800: '#0c3323',
+                            700: '#124732',
+                        },
+                        gold: {
+                            200: '#fef08a',
+                            300: '#fde047',
+                            400: '#facc15',
+                            500: '#eab308',
+                            600: '#ca8a04',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #160408;
+            background-image:
+                radial-gradient(circle at 15% 15%, rgba(234, 179, 8, 0.12) 0%, transparent 35%),
+                radial-gradient(circle at 85% 80%, rgba(18, 71, 50, 0.25) 0%, transparent 45%),
+                radial-gradient(circle at 50% 0%, rgba(97, 16, 34, 0.6) 0%, #160408 75%);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .gold-border {
+            border: 1px solid rgba(250, 204, 21, 0.28);
+            box-shadow: 0 4px 24px -2px rgba(0, 0, 0, 0.6), inset 0 0 12px rgba(250, 204, 21, 0.05);
+        }
+        .gold-border-active {
+            border: 1px solid rgba(250, 204, 21, 0.75);
+            box-shadow: 0 0 25px rgba(250, 204, 21, 0.25), inset 0 0 15px rgba(250, 204, 21, 0.1);
+        }
+
+        /* Diya Flame Animation */
+        @keyframes flicker {
+            0%, 100% { transform: scale(1) rotate(-1deg); opacity: 0.95; }
+            50% { transform: scale(1.08, 0.96) rotate(2deg); opacity: 1; }
+        }
+        .diya-flame {
+            animation: flicker 2.2s infinite ease-in-out;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #160408;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #611022;
+            border-radius: 9999px;
+            border: 1px solid rgba(250, 204, 21, 0.3);
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #eab308;
+        }
+    </style>
+</head>
+<body class="text-amber-50 font-sans antialiased selection:bg-gold-500 selection:text-royal-950">
+
+    <!-- STICKY TOP BAR -->
+    <div class="sticky top-0 z-40 bg-gradient-to-r from-felt-900 via-felt-800 to-felt-900 border-b border-gold-400/40 shadow-2xl backdrop-blur-md">
+        <div class="max-w-7xl mx-auto px-4 py-2.5 flex items-center justify-between gap-3">
+            <a href="index.html" class="text-xs sm:text-sm px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-amber-100 font-medium transition flex items-center gap-1.5 border border-white/15 shrink-0">
+                <i class="fa-solid fa-arrow-left text-gold-400"></i>
+                <span class="hidden sm:inline">Back to Variations</span>
+                <span class="sm:hidden">Back</span>
+            </a>
+            <div class="flex items-center gap-2 text-emerald-200 text-xs sm:text-sm font-medium min-w-0">
+                <i class="fa-solid fa-money-bill-wave text-emerald-400"></i>
+                <span class="truncate">Live table ledger — saved on this device</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- HEADER -->
+    <header class="relative pt-8 pb-6 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto text-center">
+        <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-royal-800/90 border border-gold-400/40 text-gold-300 text-xs sm:text-sm font-semibold mb-4 shadow-lg">
+            <i class="fa-solid fa-fire-flame-curved text-orange-400 diya-flame"></i>
+            <span>SHUBH DIWALI TAASH NIGHT</span>
+            <i class="fa-solid fa-fire-flame-curved text-orange-400 diya-flame"></i>
+        </div>
+
+        <h1 class="font-display text-3xl sm:text-5xl font-black tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-amber-200 via-gold-400 to-amber-200 drop-shadow-sm">
+            Winnings Tracker
+        </h1>
+        <p class="mt-3 max-w-xl mx-auto text-sm sm:text-base text-amber-100/80 leading-relaxed">
+            Add every player with their buy-in, update chip counts as the night goes on, then hit Settle Up to see who pays whom.
+        </p>
+    </header>
+
+    <!-- TRACKER -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-20">
+        <div class="bg-royal-900/80 gold-border rounded-2xl p-4 sm:p-6 backdrop-blur-md space-y-5">
+
+            <!-- Active Variation (synced from Variations page) -->
+            <div class="flex flex-wrap items-center justify-between gap-2 bg-royal-950/70 border border-gold-400/30 rounded-xl px-3.5 py-2.5">
+                <div class="flex items-center gap-2 min-w-0 text-sm">
+                    <i class="fa-solid fa-crown text-gold-400 shrink-0"></i>
+                    <span class="text-amber-200/70 whitespace-nowrap">Now playing:</span>
+                    <span id="activeVariationName" class="font-bold text-gold-300 truncate">—</span>
+                    <span id="activeHandNo" class="text-xs text-amber-200/60 whitespace-nowrap"></span>
+                </div>
+                <a href="index.html" class="text-xs px-2.5 py-1 rounded-md bg-white/10 hover:bg-white/15 text-amber-100 border border-white/15 font-semibold transition shrink-0 flex items-center gap-1.5">
+                    <i class="fa-solid fa-dice text-gold-400"></i> Change / view rules
+                </a>
+            </div>
+
+            <!-- Variation-specific reminder (Aaju Baaju Bust) -->
+            <div id="variationReminder" class="hidden text-xs sm:text-sm bg-rose-500/10 border border-rose-400/40 text-rose-300 rounded-xl px-3.5 py-2.5 flex items-center gap-2">
+                <i class="fa-solid fa-skull text-rose-400 shrink-0"></i>
+                <span><strong>Middle Card Rank = Instant Pack</strong> &nbsp;|&nbsp; Rank +1 &amp; −1 = Wild Jokers</span>
+            </div>
+
+            <!-- Current Hand Status -->
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                <div class="p-3 rounded-xl bg-gold-500/10 border border-gold-400/30 text-center">
+                    <div class="text-[11px] uppercase tracking-wider text-gold-400 font-bold">Pot This Hand</div>
+                    <div id="potDisplay" class="text-xl sm:text-2xl font-extrabold text-gold-300 mt-0.5">₹0</div>
+                    <div id="stakesNote" class="text-[10px] text-amber-200/60 mt-0.5">Base stakes</div>
+                </div>
+                <label class="p-3 rounded-xl bg-royal-950/90 border border-white/10 block text-center">
+                    <div class="text-[11px] uppercase tracking-wider text-amber-200/70 font-bold">Boot / Base Stake ₹</div>
+                    <input id="blindInput" type="number" value="10" min="1" onchange="setBlind(this.value)" class="mt-0.5 w-full bg-transparent text-center text-lg font-extrabold text-amber-100 focus:outline-none">
+                </label>
+                <div class="p-3 rounded-xl bg-royal-950/90 border border-white/10 text-center">
+                    <div class="text-[11px] uppercase tracking-wider text-amber-200/70 font-bold">Chaal (Seen)</div>
+                    <div id="chaalDisplay" class="text-xl font-extrabold text-amber-300 mt-0.5">₹20</div>
+                </div>
+                <div class="p-2 rounded-xl bg-white/10 border border-white/15 flex flex-col gap-1.5">
+                    <button onclick="startHand()" id="startHandBtn" class="flex-1 px-2 py-1 rounded-lg bg-gold-500 hover:bg-gold-400 text-royal-950 font-extrabold text-xs sm:text-sm transition flex items-center justify-center gap-1.5 disabled:opacity-40 disabled:cursor-not-allowed">
+                        <i class="fa-solid fa-play"></i><span id="startHandLabel">Start Hand</span>
+                    </button>
+                    <button onclick="undoLast()" id="undoBtn" class="px-2 py-0.5 text-[10px] text-amber-200/70 hover:text-white transition flex items-center justify-center gap-1 disabled:opacity-40 disabled:cursor-not-allowed" disabled>
+                        <i class="fa-solid fa-rotate-left"></i> Undo last action
+                    </button>
+                </div>
+            </div>
+
+            <!-- Table Limits & Options -->
+            <div class="flex flex-wrap items-center gap-x-4 gap-y-2 text-xs text-amber-200/70 px-1">
+                <label class="flex items-center gap-1.5">Raise cap
+                    <select id="maxMultInput" onchange="setLimit('maxMult', this.value)" class="px-2 py-1 rounded-lg bg-royal-950 border border-gold-400/30 text-gold-300 font-bold focus:outline-none">
+                        <option value="4">×4</option>
+                        <option value="8">×8</option>
+                        <option value="16">×16</option>
+                        <option value="32">×32</option>
+                    </select>
+                </label>
+                <label class="flex items-center gap-1.5">Blind limit
+                    <input id="blindLimitInput" type="number" value="4" min="1" onchange="setLimit('blindLimit', this.value)" class="w-14 px-2 py-1 rounded-lg bg-royal-950 border border-gold-400/30 text-gold-300 font-bold text-center focus:outline-none">
+                    <span class="text-amber-200/50">turns</span>
+                </label>
+                <label class="flex items-center gap-1.5">Pot limit ₹
+                    <input id="potLimitInput" type="number" value="0" min="0" placeholder="0 = off" onchange="setLimit('potLimit', this.value)" class="w-20 px-2 py-1 rounded-lg bg-royal-950 border border-gold-400/30 text-gold-300 font-bold text-center focus:outline-none">
+                </label>
+                <label class="sm:ml-auto flex items-center gap-1.5 cursor-pointer select-none">
+                    <input type="checkbox" id="strictToggle" onchange="setStrict(this.checked)" class="accent-gold-500 h-3.5 w-3.5">
+                    Strict turn order
+                </label>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                <!-- Add Player -->
+                <div class="bg-royal-950/70 border border-gold-400/25 rounded-xl p-3.5">
+                    <div class="text-xs uppercase tracking-wider text-gold-400 font-bold mb-2.5 flex items-center gap-1.5">
+                        <i class="fa-solid fa-user-plus"></i> Add Player
+                    </div>
+                    <div class="flex flex-col sm:flex-row gap-2.5">
+                        <input type="text" id="playerNameInput" placeholder="Player name" maxlength="20" class="flex-1 min-w-0 px-3.5 py-2.5 rounded-xl bg-royal-900 border border-gold-400/30 text-sm text-amber-50 placeholder-amber-200/40 focus:outline-none focus:border-gold-400">
+                        <input type="number" id="playerBuyInInput" placeholder="Buy-in ₹" min="0" class="w-full sm:w-28 px-3.5 py-2.5 rounded-xl bg-royal-900 border border-gold-400/30 text-sm text-amber-50 placeholder-amber-200/40 focus:outline-none focus:border-gold-400">
+                        <button onclick="addPlayer()" class="px-4 py-2.5 rounded-xl bg-gold-500 hover:bg-gold-400 text-royal-950 font-bold text-sm transition shrink-0">
+                            <i class="fa-solid fa-plus mr-1"></i> Add
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Record a Pot Win -->
+                <div id="recordPotBox" class="hidden bg-felt-900/80 border border-emerald-400/25 rounded-xl p-3.5">
+                    <div class="text-xs uppercase tracking-wider text-emerald-300 font-bold mb-2.5 flex items-center gap-1.5">
+                        <i class="fa-solid fa-hand-holding-dollar"></i> Award Pot to Winner <span class="normal-case font-medium text-emerald-200/60">(adds to their chips)</span>
+                    </div>
+                    <div class="flex flex-col sm:flex-row gap-2.5">
+                        <select id="potWinnerSelect" class="flex-1 min-w-0 px-3.5 py-2.5 rounded-xl bg-royal-950 border border-emerald-400/30 text-sm text-amber-50 focus:outline-none focus:border-emerald-400"></select>
+                        <input type="number" id="potAmountInput" placeholder="Pot ₹" min="1" class="w-full sm:w-28 px-3.5 py-2.5 rounded-xl bg-royal-950 border border-emerald-400/30 text-sm text-amber-50 placeholder-amber-200/40 focus:outline-none focus:border-emerald-400">
+                        <button onclick="recordPotWin()" class="px-4 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-white font-bold text-sm transition shrink-0">
+                            <i class="fa-solid fa-trophy mr-1"></i> Award
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Players List -->
+            <div>
+                <div class="flex flex-wrap items-center justify-between gap-1.5 mb-2.5">
+                    <h3 class="text-xs uppercase tracking-wider text-gold-400 font-bold flex items-center gap-1.5">
+                        <i class="fa-solid fa-users"></i> Players <span id="playerCount" class="text-amber-200/60">(0)</span>
+                    </h3>
+                    <span id="chipsTally" class="text-xs text-amber-200/60"></span>
+                </div>
+                <div id="playersList" class="grid grid-cols-1 xl:grid-cols-2 gap-2"></div>
+                <div id="playersEmpty" class="text-center py-10 text-sm text-amber-200/50 border border-dashed border-white/15 rounded-xl">
+                    <i class="fa-solid fa-user-group text-3xl mb-2 block text-gold-400/40"></i>
+                    No players yet — add your table above.
+                </div>
+            </div>
+
+            <!-- Settlement -->
+            <div class="border-t border-gold-400/20 pt-4">
+                <p class="text-xs text-amber-200/60 mb-2.5 text-center">At the end of the night, enter each player's final chip count in "Chips Now" — then:</p>
+                <button onclick="computeSettlement()" class="w-full px-4 py-3 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-white font-bold text-sm sm:text-base transition flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-scale-balanced"></i> Calculate Winnings & Settle Up
+                </button>
+                <div id="settlementResults" class="hidden mt-3 space-y-2"></div>
+            </div>
+        </div>
+    </main>
+
+    <!-- DECISION MODAL (Back Show / Showdown / Forced Show) -->
+    <div id="decisionModal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/80 backdrop-blur-md">
+        <div class="w-full max-w-md bg-royal-900 gold-border-active rounded-2xl shadow-2xl overflow-hidden">
+            <div class="px-5 py-4 bg-royal-800 border-b border-gold-400/30 flex items-start justify-between gap-3">
+                <div class="min-w-0">
+                    <h2 id="decisionTitle" class="font-display text-lg font-bold text-gold-300"></h2>
+                    <p id="decisionSub" class="text-xs text-amber-200/70 mt-1"></p>
+                </div>
+                <button onclick="closeDecision()" class="p-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-amber-100 shrink-0">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div id="decisionBody" class="p-4 space-y-2"></div>
+        </div>
+    </div>
+
+    <script>
+        // ---------- STATE ----------
+        let winningsPlayers = [];
+        try {
+            winningsPlayers = JSON.parse(localStorage.getItem('tpWinningsPlayers')) || [];
+        } catch (e) {
+            winningsPlayers = [];
+        }
+        // Migrate to status model (blind / seen / packed)
+        winningsPlayers.forEach(p => {
+            if (!p.status) p.status = p.packed ? 'packed' : 'blind';
+            if (typeof p.blindTurns !== 'number') p.blindTurns = 0;
+            if (typeof p.won !== 'number') p.won = 0;
+            delete p.packed;
+        });
+
+        let tableState = {
+            pot: 0, blind: 10, mult: 1,
+            maxMult: 16, blindLimit: 4, potLimit: 0,
+            strictTurns: false,
+            dealerIndex: -1, currentTurnIndex: -1,
+            handActive: false
+        };
+        try {
+            Object.assign(tableState, JSON.parse(localStorage.getItem('tpTableState')) || {});
+        } catch (e) {}
+
+        const undoStack = [];
+
+        function saveWinnings() {
+            localStorage.setItem('tpWinningsPlayers', JSON.stringify(winningsPlayers));
+        }
+
+        function saveTable() {
+            localStorage.setItem('tpTableState', JSON.stringify(tableState));
+        }
+
+        function saveAll() {
+            saveWinnings();
+            saveTable();
+        }
+
+        function pushUndo() {
+            undoStack.push(JSON.stringify({ players: winningsPlayers, table: tableState }));
+            if (undoStack.length > 40) undoStack.shift();
+        }
+
+        function undoLast() {
+            const snap = undoStack.pop();
+            if (!snap) return;
+            const { players, table } = JSON.parse(snap);
+            winningsPlayers = players;
+            tableState = table;
+            saveAll();
+            closeDecision();
+            renderWinnings();
+        }
+
+        // ---------- HELPERS ----------
+        const getPlayer = (id) => winningsPlayers.find(p => p.id === id);
+        const idxOf = (p) => winningsPlayers.indexOf(p);
+        const nonPacked = () => winningsPlayers.filter(p => p.status !== 'packed');
+        const unit = () => tableState.blind * tableState.mult; // 1x current betting unit
+
+        function charge(p, amount) {
+            const bet = Math.min(amount, p.chips);
+            p.chips -= bet;
+            tableState.pot += bet;
+            return bet;
+        }
+
+        function nextActiveIndex(fromIdx) {
+            const n = winningsPlayers.length;
+            for (let k = 1; k <= n; k++) {
+                const i = (fromIdx + k) % n;
+                if (winningsPlayers[i].status !== 'packed') return i;
+            }
+            return -1;
+        }
+
+        function prevActiveIndex(fromIdx) {
+            const n = winningsPlayers.length;
+            for (let k = 1; k <= n; k++) {
+                const i = (fromIdx - k + n) % n;
+                if (winningsPlayers[i].status !== 'packed') return i;
+            }
+            return -1;
+        }
+
+        function canAct(p) {
+            return tableState.handActive && p && p.status !== 'packed' &&
+                (!tableState.strictTurns || idxOf(p) === tableState.currentTurnIndex);
+        }
+
+        // ---------- DECISION MODAL ----------
+        function openDecision({ title, sub, body }) {
+            document.getElementById('decisionTitle').textContent = title;
+            document.getElementById('decisionSub').innerHTML = sub;
+            document.getElementById('decisionBody').innerHTML = body;
+            const m = document.getElementById('decisionModal');
+            m.classList.remove('hidden');
+            m.classList.add('flex');
+        }
+
+        function closeDecision() {
+            const m = document.getElementById('decisionModal');
+            m.classList.add('hidden');
+            m.classList.remove('flex');
+        }
+
+        const decBtn = (onclick, cls, label) =>
+            `<button onclick="${onclick}" class="w-full px-4 py-2.5 rounded-xl text-sm font-bold transition border ${cls}">${label}</button>`;
+
+        // ---------- HAND LIFECYCLE ----------
+        function startHand() {
+            if (winningsPlayers.length < 2) return;
+            if (tableState.pot > 0 && !confirm(
+                `Pot still has ${formatMoney(tableState.pot)} in it.\n\n` +
+                `OK = discard the pot and start a fresh hand.\n` +
+                `Cancel = go back so you can award it to a winner first.`
+            )) return;
+            pushUndo();
+            tableState.pot = 0;
+            tableState.mult = 1;
+            winningsPlayers.forEach(p => {
+                p.status = 'blind';
+                p.blindTurns = 0;
+                charge(p, tableState.blind); // boot ante
+            });
+            tableState.dealerIndex = (tableState.dealerIndex + 1) % winningsPlayers.length;
+            tableState.currentTurnIndex = nextActiveIndex(tableState.dealerIndex);
+            tableState.handActive = true;
+            saveAll();
+            renderWinnings();
+            bumpHandNumber();
+        }
+
+        function endHand() {
+            tableState.handActive = false;
+            tableState.mult = 1;
+            tableState.currentTurnIndex = -1;
+        }
+
+        function afterAction(actorIdx) {
+            if (nonPacked().length === 1) {
+                awardPotTo(nonPacked()[0].id);
+                return;
+            }
+            tableState.currentTurnIndex = nextActiveIndex(actorIdx);
+            saveAll();
+            renderWinnings();
+            checkPotLimit();
+        }
+
+        function checkPotLimit() {
+            if (tableState.potLimit > 0 && tableState.pot >= tableState.potLimit && nonPacked().length > 1) {
+                openForcedShow();
+            }
+        }
+
+        // ---------- BETTING ----------
+        function bumpBlindTurns(p) {
+            p.blindTurns++;
+            if (p.blindTurns >= tableState.blindLimit) p.status = 'seen';
+        }
+
+        // Applies a raise: doubles mult and charges the NEW level if the player
+        // can cover it; otherwise just all-ins for what they have (no raise).
+        function applyCounter(p, chargeAmount) {
+            if (tableState.mult * 2 <= tableState.maxMult && p.chips >= chargeAmount) {
+                tableState.mult *= 2;
+            }
+            charge(p, chargeAmount);
+        }
+
+        function betBlind(id) {
+            const p = getPlayer(id);
+            if (!canAct(p) || p.status !== 'blind') return;
+            pushUndo();
+            charge(p, unit());
+            bumpBlindTurns(p);
+            afterAction(idxOf(p));
+        }
+
+        function betBlindCounter(id) {
+            const p = getPlayer(id);
+            if (!canAct(p) || p.status !== 'blind' || tableState.mult * 2 > tableState.maxMult) return;
+            pushUndo();
+            applyCounter(p, tableState.blind * tableState.mult * 2); // new 1xS
+            bumpBlindTurns(p);
+            afterAction(idxOf(p));
+        }
+
+        function betChaal(id) {
+            const p = getPlayer(id);
+            if (!canAct(p)) return;
+            pushUndo();
+            p.status = 'seen'; // tapping Chaal marks them seen, implicitly
+            charge(p, unit() * 2);
+            afterAction(idxOf(p));
+        }
+
+        function betChaalCounter(id) {
+            const p = getPlayer(id);
+            if (!canAct(p) || tableState.mult * 2 > tableState.maxMult) return;
+            pushUndo();
+            p.status = 'seen';
+            applyCounter(p, tableState.blind * tableState.mult * 4); // new 2xS
+            afterAction(idxOf(p));
+        }
+
+        function packPlayer(id) {
+            const p = getPlayer(id);
+            if (!p || p.status === 'packed' || !tableState.handActive) return;
+            pushUndo();
+            p.status = 'packed';
+            afterAction(idxOf(p));
+        }
+
+        // ---------- BACK SHOW / SIDESHOW ----------
+        function canBackShow(p) {
+            if (!tableState.handActive || !p || p.status === 'packed') return false;
+            if (nonPacked().length < 3) return false;
+            const prevIdx = prevActiveIndex(idxOf(p));
+            return prevIdx >= 0 && winningsPlayers[prevIdx].status === 'seen';
+        }
+
+        function backShow(id) {
+            const p = getPlayer(id);
+            if (!canBackShow(p) || !canAct(p)) return;
+            pushUndo();
+            p.status = 'seen';
+            charge(p, unit() * 2);
+            const prevIdx = prevActiveIndex(idxOf(p));
+            const prev = winningsPlayers[prevIdx];
+            saveAll();
+            renderWinnings();
+            openDecision({
+                title: `Back Show: ${p.name} vs ${prev.name}`,
+                sub: `${escapeHtml(p.name)} paid ${formatMoney(unit() * 2)} to challenge ${escapeHtml(prev.name)}. <strong>Challenger loses on a tie.</strong>`,
+                body:
+                    decBtn(`resolveBackShow('${p.id}', '${prev.id}', 'refused')`,
+                        'bg-white/10 hover:bg-white/15 text-amber-100 border-white/15',
+                        `<i class="fa-solid fa-hand mr-1"></i> Refused — continue hand`) +
+                    decBtn(`resolveBackShow('${p.id}', '${prev.id}', 'challenger')`,
+                        'bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 border-emerald-400/40',
+                        `${escapeHtml(p.name)} won — ${escapeHtml(prev.name)} packs`) +
+                    decBtn(`resolveBackShow('${p.id}', '${prev.id}', 'defender')`,
+                        'bg-rose-500/15 hover:bg-rose-500/30 text-rose-300 border-rose-400/40',
+                        `${escapeHtml(prev.name)} won or tied — ${escapeHtml(p.name)} packs`)
+            });
+        }
+
+        function resolveBackShow(challengerId, defenderId, outcome) {
+            pushUndo();
+            if (outcome === 'challenger') {
+                const d = getPlayer(defenderId);
+                if (d) d.status = 'packed';
+            } else if (outcome === 'defender') {
+                const c = getPlayer(challengerId);
+                if (c) c.status = 'packed';
+            }
+            closeDecision();
+            const actorIdx = winningsPlayers.findIndex(x => x.id === challengerId);
+            if (nonPacked().length === 1) {
+                awardPotTo(nonPacked()[0].id);
+                return;
+            }
+            tableState.currentTurnIndex = nextActiveIndex(actorIdx);
+            saveAll();
+            renderWinnings();
+            checkPotLimit();
+        }
+
+        // ---------- SHOWDOWN ----------
+        function callShow(id, kind) {
+            const p = getPlayer(id);
+            if (!canAct(p) || nonPacked().length !== 2) return;
+            const cost = kind === 'seen' ? unit() * 2 : unit();
+            if (kind === 'seen') {
+                const other = nonPacked().find(o => o.id !== p.id);
+                if (!other || other.status !== 'seen') return;
+                p.status = 'seen';
+            }
+            pushUndo();
+            charge(p, cost);
+            saveAll();
+            renderWinnings();
+            const actives = nonPacked();
+            openDecision({
+                title: 'Showdown!',
+                sub: `${escapeHtml(p.name)} called Show for ${formatMoney(cost)}. <strong>Caller loses on an exact tie.</strong> Tap the winner:`,
+                body: actives.map(o =>
+                    decBtn(`showdownWinner('${o.id}')`,
+                        'bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 border-emerald-400/40',
+                        `<i class="fa-solid fa-crown text-gold-400 mr-1"></i> ${escapeHtml(o.name)} wins ${formatMoney(tableState.pot)}`)
+                ).join('')
+            });
+        }
+
+        function showdownWinner(id) {
+            closeDecision();
+            awardPotTo(id);
+        }
+
+        function openForcedShow() {
+            const actives = nonPacked();
+            openDecision({
+                title: 'Pot Limit Reached — Forced Show!',
+                sub: `Pot hit <strong>${formatMoney(tableState.pot)}</strong> (limit ${formatMoney(tableState.potLimit)}). Tap the winner:`,
+                body: actives.map(o =>
+                    decBtn(`showdownWinner('${o.id}')`,
+                        'bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 border-emerald-400/40',
+                        `<i class="fa-solid fa-crown text-gold-400 mr-1"></i> ${escapeHtml(o.name)} wins ${formatMoney(tableState.pot)}`)
+                ).join('')
+            });
+        }
+
+        function awardPotTo(id) {
+            const p = getPlayer(id);
+            if (!p) return;
+            pushUndo();
+            p.chips += tableState.pot;
+            p.won = (p.won || 0) + tableState.pot;
+            tableState.pot = 0;
+            endHand();
+            saveAll();
+            renderWinnings();
+            bumpHandNumber();
+        }
+
+        // ---------- PLAYERS ----------
+        function addPlayer() {
+            const nameEl = document.getElementById('playerNameInput');
+            const buyInEl = document.getElementById('playerBuyInInput');
+            const name = nameEl.value.trim();
+            if (!name) { nameEl.focus(); return; }
+            const buyIn = Math.max(0, parseFloat(buyInEl.value) || 0);
+            winningsPlayers.push({ id: 'p' + Date.now(), name, buyIn, chips: buyIn, won: 0, status: 'blind', blindTurns: 0 });
+            nameEl.value = '';
+            buyInEl.value = '';
+            saveWinnings();
+            renderWinnings();
+            nameEl.focus();
+        }
+
+        function removePlayer(id) {
+            const idx = winningsPlayers.findIndex(x => x.id === id);
+            if (idx < 0) return;
+            pushUndo();
+            winningsPlayers = winningsPlayers.filter(p => p.id !== id);
+            const n = winningsPlayers.length;
+            if (n === 0) {
+                tableState.dealerIndex = -1;
+                tableState.currentTurnIndex = -1;
+                tableState.handActive = false;
+                tableState.pot = 0;
+            } else {
+                tableState.dealerIndex = Math.min(tableState.dealerIndex, n - 1);
+                tableState.currentTurnIndex = Math.min(tableState.currentTurnIndex, n - 1);
+                if (tableState.handActive) {
+                    if (nonPacked().length === 1) { awardPotTo(nonPacked()[0].id); return; }
+                    if (winningsPlayers[tableState.currentTurnIndex] &&
+                        winningsPlayers[tableState.currentTurnIndex].status === 'packed') {
+                        tableState.currentTurnIndex = nextActiveIndex(tableState.currentTurnIndex - 1);
+                    }
+                }
+            }
+            saveAll();
+            renderWinnings();
+        }
+
+        function updatePlayerAmount(id, field, value) {
+            const p = getPlayer(id);
+            if (!p) return;
+            p[field] = Math.max(0, parseFloat(value) || 0);
+            saveWinnings();
+            renderWinnings();
+        }
+
+        function setBlind(value) {
+            tableState.blind = Math.max(1, parseFloat(value) || 10);
+            saveTable();
+            renderWinnings();
+        }
+
+        function setLimit(key, value) {
+            tableState[key] = Math.max(0, parseFloat(value) || 0);
+            saveTable();
+            renderWinnings();
+        }
+
+        function setStrict(on) {
+            tableState.strictTurns = !!on;
+            saveTable();
+            renderWinnings();
+        }
+
+        // Manual award (split pots / edge cases)
+        function recordPotWin() {
+            const sel = document.getElementById('potWinnerSelect');
+            const amtEl = document.getElementById('potAmountInput');
+            const amount = parseFloat(amtEl.value) || 0;
+            const p = getPlayer(sel.value);
+            if (!p || amount <= 0) { amtEl.focus(); return; }
+            pushUndo();
+            p.chips += amount;
+            p.won = (p.won || 0) + amount;
+            tableState.pot = Math.max(0, tableState.pot - amount);
+            if (tableState.pot === 0) endHand();
+            amtEl.value = '';
+            saveAll();
+            renderWinnings();
+            bumpHandNumber();
+        }
+
+        // ---------- ACTION BUTTONS PER PLAYER ----------
+        function actionButtonsHTML(p, idx) {
+            const bb = 'px-2.5 py-1.5 rounded-lg text-xs font-bold transition border disabled:opacity-40 disabled:cursor-not-allowed';
+            if (!tableState.handActive) {
+                return `<span class="text-[11px] text-amber-200/50 italic">Hand over — press Start Hand to deal the next one.</span>`;
+            }
+            if (p.status === 'packed') return '';
+
+            const u = unit();
+            const isTurn = !tableState.strictTurns || idx === tableState.currentTurnIndex;
+            const dis = isTurn && p.chips > 0 ? '' : 'disabled';
+            const packDis = isTurn ? '' : 'disabled';
+            const capHit = tableState.mult * 2 > tableState.maxMult;
+            const actives = nonPacked();
+            let h = '';
+
+            if (p.status === 'blind') {
+                h += `<button onclick="betBlind('${p.id}')" ${dis}
+                    class="${bb} bg-amber-500/15 hover:bg-amber-500/30 text-amber-200 border-amber-400/40" title="Bet blind (1x stake)">
+                    <i class="fa-solid fa-eye-slash text-[10px] mr-1"></i>Blind ${formatMoney(u)}</button>`;
+                // Blind Counter only unlocks once someone has made the first chaal
+                if (actives.some(o => o.status === 'seen')) {
+                    h += `<button onclick="betBlindCounter('${p.id}')" ${dis || capHit ? 'disabled' : ''}
+                        class="${bb} bg-orange-500/15 hover:bg-orange-500/30 text-orange-300 border-orange-400/40" title="Blind counter — raise the seen players, doubles stakes">
+                        <i class="fa-solid fa-angles-up text-[10px] mr-1"></i>Blind Counter ${formatMoney(u * 2)}</button>`;
+                }
+            }
+            h += `<button onclick="betChaal('${p.id}')" ${dis}
+                class="${bb} bg-gold-500/15 hover:bg-gold-500/30 text-gold-300 border-gold-400/40" title="Bet chaal (2x stake) — marks you as Seen">
+                <i class="fa-solid fa-eye text-[10px] mr-1"></i>Chaal ${formatMoney(u * 2)}</button>`;
+            h += `<button onclick="betChaalCounter('${p.id}')" ${dis || capHit ? 'disabled' : ''}
+                class="${bb} bg-fuchsia-500/15 hover:bg-fuchsia-500/30 text-fuchsia-300 border-fuchsia-400/40" title="Chaal counter — seen raise, doubles stakes">
+                <i class="fa-solid fa-angles-up text-[10px] mr-1"></i>Chaal Counter ${formatMoney(u * 4)}</button>`;
+
+            if (canBackShow(p)) {
+                h += `<button onclick="backShow('${p.id}')" ${dis}
+                    class="${bb} bg-sky-500/15 hover:bg-sky-500/30 text-sky-300 border-sky-400/40" title="Challenge the previous player — costs 2x stake, loser packs">
+                    <i class="fa-solid fa-people-arrows text-[10px] mr-1"></i>Back Show ${formatMoney(u * 2)}</button>`;
+            }
+
+            if (actives.length === 2) {
+                const other = actives.find(o => o.id !== p.id);
+                if (p.status === 'blind') {
+                    h += `<button onclick="callShow('${p.id}', 'blind')" ${dis}
+                        class="${bb} bg-emerald-500/15 hover:bg-emerald-500/30 text-emerald-300 border-emerald-400/40" title="Call the final show while blind (1x stake)">
+                        <i class="fa-solid fa-flag-checkered text-[10px] mr-1"></i>Blind Show ${formatMoney(u)}</button>`;
+                    const seenOk = other && other.status === 'seen';
+                    h += `<button onclick="callShow('${p.id}', 'seen')" ${seenOk ? dis : 'disabled'}
+                        class="${bb} bg-teal-500/15 hover:bg-teal-500/30 text-teal-300 border-teal-400/40" title="${seenOk ? 'Peeked at cards? Call seen show (2x)' : 'Only allowed once the opponent has seen their cards'}">
+                        <i class="fa-solid fa-flag-checkered text-[10px] mr-1"></i>Seen Show ${formatMoney(u * 2)}</button>`;
+                } else {
+                    const ok = other && other.status === 'seen';
+                    h += `<button onclick="callShow('${p.id}', 'seen')" ${ok ? dis : 'disabled'}
+                        class="${bb} bg-teal-500/15 hover:bg-teal-500/30 text-teal-300 border-teal-400/40" title="${ok ? 'Call the final show (2x stake)' : 'Cannot call Seen Show against a Blind player'}">
+                        <i class="fa-solid fa-flag-checkered text-[10px] mr-1"></i>Show ${formatMoney(u * 2)}</button>`;
+                }
+            }
+
+            h += `<button onclick="packPlayer('${p.id}')" ${packDis}
+                class="${bb} bg-rose-500/15 hover:bg-rose-500/30 text-rose-300 border-rose-400/40" title="Fold this hand">
+                <i class="fa-solid fa-box-open text-[10px] mr-1"></i>Pack</button>`;
+            return h;
+        }
+
+        // ---------- RENDER ----------
+        function renderWinnings() {
+            const list = document.getElementById('playersList');
+            const empty = document.getElementById('playersEmpty');
+            const sel = document.getElementById('potWinnerSelect');
+            const prevSel = sel.value;
+
+            document.getElementById('playerCount').textContent = `(${winningsPlayers.length})`;
+            empty.classList.toggle('hidden', winningsPlayers.length > 0);
+
+            document.getElementById('potDisplay').textContent = formatMoney(tableState.pot);
+            document.getElementById('stakesNote').textContent = tableState.mult > 1
+                ? `Stakes ×${tableState.mult} (countered!)` : 'Base stakes';
+            document.getElementById('chaalDisplay').textContent = formatMoney(unit() * 2);
+            const blindEl = document.getElementById('blindInput');
+            if (document.activeElement !== blindEl) blindEl.value = tableState.blind;
+            const potAmtEl = document.getElementById('potAmountInput');
+            if (document.activeElement !== potAmtEl) potAmtEl.value = tableState.pot || '';
+
+            const maxMultEl = document.getElementById('maxMultInput');
+            if (document.activeElement !== maxMultEl) maxMultEl.value = String(tableState.maxMult);
+            const blindLimEl = document.getElementById('blindLimitInput');
+            if (document.activeElement !== blindLimEl) blindLimEl.value = tableState.blindLimit;
+            const potLimEl = document.getElementById('potLimitInput');
+            if (document.activeElement !== potLimEl) potLimEl.value = tableState.potLimit || '';
+            document.getElementById('strictToggle').checked = !!tableState.strictTurns;
+
+            document.getElementById('undoBtn').disabled = undoStack.length === 0;
+            const startBtn = document.getElementById('startHandBtn');
+            startBtn.disabled = winningsPlayers.length < 2;
+            document.getElementById('startHandLabel').textContent =
+                tableState.handActive ? 'Restart Hand' : 'Start Hand & Boot';
+
+            const eligible = nonPacked().length ? nonPacked() : winningsPlayers;
+            sel.innerHTML = eligible.map(p =>
+                `<option value="${p.id}">${escapeHtml(p.name)}</option>`
+            ).join('');
+            if (winningsPlayers.some(p => p.id === prevSel)) sel.value = prevSel;
+            document.getElementById('recordPotBox').classList.toggle('hidden', winningsPlayers.length === 0);
+
+            const totalBuy = winningsPlayers.reduce((s, p) => s + p.buyIn, 0);
+            const totalChips = winningsPlayers.reduce((s, p) => s + p.chips, 0);
+            const diff = totalChips + tableState.pot - totalBuy;
+            document.getElementById('chipsTally').textContent = winningsPlayers.length
+                ? `In play: ${formatMoney(totalBuy)} · Chips + pot: ${formatMoney(totalChips + tableState.pot)}${diff !== 0 ? ` (${diff > 0 ? '+' : '−'}${formatMoney(Math.abs(diff))})` : ''}`
+                : '';
+
+            list.innerHTML = winningsPlayers.map((p, idx) => {
+                const packed = p.status === 'packed';
+                const net = p.chips - p.buyIn;
+                const netClass = net > 0 ? 'text-emerald-400 border-emerald-400/40 bg-emerald-500/10'
+                    : net < 0 ? 'text-rose-400 border-rose-400/40 bg-rose-500/10'
+                    : 'text-amber-300 border-white/15 bg-black/20';
+                const isDealer = idx === tableState.dealerIndex && tableState.handActive;
+                const isTurn = tableState.handActive && idx === tableState.currentTurnIndex;
+                const statusChip = packed
+                    ? '<span class="text-[10px] px-1.5 py-0.5 rounded bg-rose-500/15 text-rose-300 border border-rose-400/30 font-bold">PACKED</span>'
+                    : p.status === 'seen'
+                    ? '<span class="text-[10px] px-1.5 py-0.5 rounded bg-emerald-500/15 text-emerald-300 border border-emerald-400/30 font-bold"><i class="fa-solid fa-eye text-[8px]"></i> SEEN</span>'
+                    : `<span class="text-[10px] px-1.5 py-0.5 rounded bg-amber-500/15 text-amber-300 border border-amber-400/30 font-bold"><i class="fa-solid fa-eye-slash text-[8px]"></i> BLIND${tableState.handActive ? ` ${p.blindTurns}/${tableState.blindLimit}` : ''}</span>`;
+                return `
+                    <div class="p-3 rounded-xl bg-royal-950/80 border transition ${packed ? 'border-white/5 opacity-60' : isTurn ? 'border-gold-400/50 ring-1 ring-gold-400/40' : 'border-white/10'} grid grid-cols-2 sm:grid-cols-12 gap-x-3 gap-y-2 items-center">
+                        <div class="col-span-2 sm:col-span-3 min-w-0">
+                            <span class="font-bold truncate flex items-center gap-1.5 ${packed ? 'line-through text-amber-200/50' : 'text-amber-100'}">
+                                ${isDealer ? '<span class="text-[10px] px-1.5 py-0.5 rounded-full bg-gold-400 text-royal-950 font-black shrink-0">D</span>' : ''}
+                                <span class="truncate">${escapeHtml(p.name)}</span>
+                                ${isTurn ? '<span class="text-[10px] px-1.5 py-0.5 rounded bg-gold-500/20 text-gold-300 border border-gold-400/40 font-bold shrink-0">▸ TURN</span>' : ''}
+                            </span>
+                            <span class="inline-flex items-center gap-1.5 mt-1">${statusChip}</span>
+                            ${p.won ? `<span class="block text-[11px] text-emerald-300/70 mt-0.5">Pots won: ${formatMoney(p.won)}</span>` : ''}
+                        </div>
+                        <label class="sm:col-span-3 text-[11px] uppercase tracking-wide text-amber-200/60 font-semibold">Buy-in ₹
+                            <input type="number" value="${p.buyIn}" min="0" onchange="updatePlayerAmount('${p.id}', 'buyIn', this.value)" class="mt-0.5 w-full px-2.5 py-1.5 rounded-lg bg-royal-900 border border-gold-400/30 text-sm font-bold text-gold-300 focus:outline-none focus:border-gold-400">
+                        </label>
+                        <label class="sm:col-span-3 text-[11px] uppercase tracking-wide text-amber-200/60 font-semibold">Chips now ₹
+                            <input type="number" value="${p.chips}" min="0" onchange="updatePlayerAmount('${p.id}', 'chips', this.value)" class="mt-0.5 w-full px-2.5 py-1.5 rounded-lg bg-royal-900 border border-emerald-400/30 text-sm font-bold text-emerald-300 focus:outline-none focus:border-emerald-400">
+                        </label>
+                        <div class="sm:col-span-2 flex items-center">
+                            <span class="px-2 py-1 rounded-lg border text-xs font-extrabold whitespace-nowrap ${netClass}">${net >= 0 ? '+' : '−'}${formatMoney(Math.abs(net))}</span>
+                        </div>
+                        <div class="sm:col-span-1 flex justify-end">
+                            <button onclick="removePlayer('${p.id}')" class="p-1.5 rounded-lg text-amber-200/50 hover:text-rose-400 hover:bg-rose-500/10 transition" title="Remove player">
+                                <i class="fa-solid fa-trash-can text-xs"></i>
+                            </button>
+                        </div>
+                        <div class="col-span-2 sm:col-span-12 flex flex-wrap items-center gap-2 pt-2 mt-1 border-t border-white/5">
+                            ${actionButtonsHTML(p, idx)}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // ---------- SETTLEMENT ----------
+        function computeSettlement() {
+            const box = document.getElementById('settlementResults');
+            if (winningsPlayers.length === 0) {
+                box.classList.add('hidden');
+                return;
+            }
+            const debtors = winningsPlayers
+                .map(p => ({ name: p.name, amt: p.buyIn - p.chips }))
+                .filter(x => x.amt > 0.5)
+                .sort((a, b) => b.amt - a.amt);
+            const creditors = winningsPlayers
+                .map(p => ({ name: p.name, amt: p.chips - p.buyIn }))
+                .filter(x => x.amt > 0.5)
+                .sort((a, b) => b.amt - a.amt);
+
+            const transfers = [];
+            let i = 0, j = 0;
+            while (i < debtors.length && j < creditors.length) {
+                const pay = Math.min(debtors[i].amt, creditors[j].amt);
+                transfers.push({ from: debtors[i].name, to: creditors[j].name, amt: pay });
+                debtors[i].amt -= pay;
+                creditors[j].amt -= pay;
+                if (debtors[i].amt < 0.5) i++;
+                if (creditors[j].amt < 0.5) j++;
+            }
+
+            const topWinner = creditors.length
+                ? winningsPlayers.reduce((a, b) => (b.chips - b.buyIn) > (a.chips - a.buyIn) ? b : a)
+                : null;
+            const unsettled = debtors.reduce((s, d) => s + d.amt, 0);
+
+            box.innerHTML = `
+                ${tableState.pot > 0 ? `
+                    <div class="bg-amber-500/10 border border-amber-400/40 rounded-xl p-3 text-xs sm:text-sm text-amber-200 flex items-start gap-2">
+                        <i class="fa-solid fa-triangle-exclamation text-gold-400 mt-0.5 shrink-0"></i>
+                        <span><strong class="text-gold-300">${formatMoney(tableState.pot)}</strong> is still in the pot and hasn't been awarded — the numbers below are incomplete until you award it to the hand's winner.</span>
+                    </div>` : ''}
+                <div class="bg-felt-900/80 border border-emerald-400/30 rounded-xl p-3.5">
+                    ${topWinner && topWinner.chips > topWinner.buyIn ? `
+                        <div class="text-center mb-3">
+                            <i class="fa-solid fa-crown text-gold-400"></i>
+                            <span class="font-display font-bold text-gold-300">Big Winner: ${escapeHtml(topWinner.name)}</span>
+                            <span class="text-emerald-400 font-extrabold">+${formatMoney(topWinner.chips - topWinner.buyIn)}</span>
+                        </div>` : ''}
+                    ${transfers.length ? transfers.map(t => `
+                        <div class="flex items-center justify-between gap-3 py-2 border-b border-white/10 last:border-0 text-sm">
+                            <span class="text-rose-300 font-semibold truncate">${escapeHtml(t.from)}</span>
+                            <span class="text-amber-200/60 text-xs shrink-0">pays <strong class="text-gold-300 text-sm">${formatMoney(t.amt)}</strong> to</span>
+                            <span class="text-emerald-300 font-semibold truncate text-right">${escapeHtml(t.to)}</span>
+                        </div>
+                    `).join('') : `
+                        <p class="text-center text-sm text-amber-200/70">Everyone broke even — no payments needed!</p>`}
+                    ${unsettled > 0.5 ? `
+                        <p class="text-center text-xs text-amber-200/60 pt-2">
+                            <i class="fa-solid fa-circle-info mr-1"></i>
+                            ${formatMoney(unsettled)} more is still owed — resolves once the pot lands with its winner.
+                        </p>` : ''}
+                </div>
+            `;
+            box.classList.remove('hidden');
+            box.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        // ---------- SHARED STATE & MISC ----------
+        function escapeHtml(s) {
+            return String(s).replace(/[&<>"']/g, c => ({
+                '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+            }[c]));
+        }
+
+        function formatMoney(n) {
+            return `₹${Math.round(n).toLocaleString('en-IN')}`;
+        }
+
+        // Shared state with the Variations page (index.html writes tpGameState)
+        function loadGameState() {
+            const nameEl = document.getElementById('activeVariationName');
+            const handEl = document.getElementById('activeHandNo');
+            try {
+                const gs = JSON.parse(localStorage.getItem('tpGameState'));
+                if (gs && gs.gameId) {
+                    nameEl.textContent = gs.gameName || gs.gameId;
+                    handEl.textContent = `· Hand #${gs.round || 1}`;
+                    document.getElementById('variationReminder').classList.toggle(
+                        'hidden', gs.gameId !== 'aaju-baaju-bust');
+                    return gs;
+                }
+            } catch (e) {}
+            nameEl.textContent = 'No variation picked yet';
+            handEl.textContent = '';
+            document.getElementById('variationReminder').classList.add('hidden');
+            return null;
+        }
+
+        function bumpHandNumber() {
+            try {
+                const gs = JSON.parse(localStorage.getItem('tpGameState'));
+                if (gs && gs.gameId) {
+                    gs.round = (gs.round || 1) + 1;
+                    localStorage.setItem('tpGameState', JSON.stringify(gs));
+                }
+            } catch (e) {}
+            loadGameState();
+        }
+
+        // Live-sync if the Variations page changes game in another tab
+        window.addEventListener('storage', (e) => {
+            if (e.key === 'tpGameState') loadGameState();
+        });
+
+        window.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeDecision();
+        });
+
+        window.onload = function () {
+            loadGameState();
+            renderWinnings();
+            // Came from "Start Round & Open Tracker" on the Variations page —
+            // boot up the new hand automatically.
+            if (localStorage.getItem('tpAutoStart') === '1') {
+                localStorage.removeItem('tpAutoStart');
+                if (winningsPlayers.length >= 2) startHand();
+            }
+        };
+    </script>
+</body>
+</html>

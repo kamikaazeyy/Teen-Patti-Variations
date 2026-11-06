@@ -1,0 +1,1206 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shubh Diwali • Teen Patti Royal Variations Companion</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        display: ['"Cinzel Decorative"', 'serif'],
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                    },
+                    colors: {
+                        royal: {
+                            950: '#160408',
+                            900: '#28060e',
+                            800: '#420a17',
+                            700: '#611022',
+                        },
+                        felt: {
+                            900: '#071f15',
+                            800: '#0c3323',
+                            700: '#124732',
+                        },
+                        gold: {
+                            200: '#fef08a',
+                            300: '#fde047',
+                            400: '#facc15',
+                            500: '#eab308',
+                            600: '#ca8a04',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #160408;
+            background-image: 
+                radial-gradient(circle at 15% 15%, rgba(234, 179, 8, 0.12) 0%, transparent 35%),
+                radial-gradient(circle at 85% 80%, rgba(18, 71, 50, 0.25) 0%, transparent 45%),
+                radial-gradient(circle at 50% 0%, rgba(97, 16, 34, 0.6) 0%, #160408 75%);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Festive Gold Border Glow */
+        .gold-border {
+            border: 1px solid rgba(250, 204, 21, 0.28);
+            box-shadow: 0 4px 24px -2px rgba(0, 0, 0, 0.6), inset 0 0 12px rgba(250, 204, 21, 0.05);
+        }
+        .gold-border-active {
+            border: 1px solid rgba(250, 204, 21, 0.75);
+            box-shadow: 0 0 25px rgba(250, 204, 21, 0.25), inset 0 0 15px rgba(250, 204, 21, 0.1);
+        }
+
+        /* Playing Card Styling */
+        .playing-card {
+            width: 72px;
+            height: 104px;
+            background: linear-gradient(145deg, #ffffff 0%, #f3f4f6 100%);
+            border-radius: 10px;
+            box-shadow: 0 6px 14px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.8);
+            position: relative;
+            display: inline-flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 6px;
+            user-select: none;
+            overflow: hidden;
+            transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .playing-card:hover {
+            transform: translateY(-6px) rotate(1deg);
+            z-index: 10;
+        }
+        .playing-card.joker-glow {
+            box-shadow: 0 0 16px rgba(250, 204, 21, 0.85), 0 0 0 2px #eab308;
+            background: linear-gradient(145deg, #fffbeb 0%, #fef3c7 100%);
+        }
+        .playing-card.bust-glow {
+            box-shadow: 0 0 16px rgba(244, 63, 94, 0.85), 0 0 0 2px #f43f5e;
+            background: linear-gradient(145deg, #fff1f2 0%, #ffe4e6 100%);
+        }
+        .playing-card.discarded-card {
+            opacity: 0.45;
+            filter: grayscale(60%);
+            transform: scale(0.92);
+        }
+
+        /* Shrink cards on very small screens */
+        @media (max-width: 420px) {
+            .playing-card {
+                width: 58px;
+                height: 84px;
+                padding: 4px;
+                border-radius: 8px;
+            }
+        }
+
+        /* Hide scrollbar on horizontal category tab scroll */
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+
+        /* Diya Flame Animation */
+        @keyframes flicker {
+            0%, 100% { transform: scale(1) rotate(-1deg); opacity: 0.95; }
+            50% { transform: scale(1.08, 0.96) rotate(2deg); opacity: 1; }
+        }
+        .diya-flame {
+            animation: flicker 2.2s infinite ease-in-out;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #160408;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #611022;
+            border-radius: 9999px;
+            border: 1px solid rgba(250, 204, 21, 0.3);
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #eab308;
+        }
+    </style>
+</head>
+<body class="text-amber-50 font-sans antialiased selection:bg-gold-500 selection:text-royal-950">
+
+    <!-- ACTIVE TABLE BANNER (Sticky Top Status Bar) -->
+    <div id="activeTableBanner" class="sticky top-0 z-40 bg-gradient-to-r from-felt-900 via-felt-800 to-felt-900 border-b border-gold-400/40 shadow-2xl backdrop-blur-md transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 py-2.5 flex flex-wrap items-center justify-between gap-3">
+            <div class="flex items-center gap-2 sm:gap-3 min-w-0">
+                <span class="flex h-3 w-3 relative shrink-0">
+                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                    <span class="relative inline-flex rounded-full h-3 w-3 bg-emerald-500"></span>
+                </span>
+                <div class="hidden sm:block text-xs sm:text-sm font-medium text-emerald-200 uppercase tracking-wider whitespace-nowrap">
+                    Current Table Variation:
+                </div>
+                <div id="currentGameBadge" class="px-3 py-1 rounded-full bg-gold-500/20 border border-gold-400/50 text-gold-300 font-bold text-sm sm:text-base flex items-center gap-2 min-w-0 max-w-full">
+                    <i class="fa-solid fa-crown text-gold-400 text-xs shrink-0"></i>
+                    <span id="currentGameTitle" class="truncate">AK-47 (Classic Diwali Joker)</span>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-2 sm:gap-3 ml-auto">
+                <div class="hidden md:flex items-center gap-2 text-xs text-amber-200/80 bg-black/30 px-3 py-1.5 rounded-lg border border-white/10">
+                    <span>Round #<strong id="roundCounter" class="text-gold-300">1</strong></span>
+                    <button onclick="incrementRound()" class="ml-1 text-gold-400 hover:text-gold-200 transition" title="Next Round">
+                        <i class="fa-solid fa-plus-circle"></i>
+                    </button>
+                </div>
+                <button onclick="openCurrentGameModal()" class="text-xs sm:text-sm px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-amber-100 font-medium transition flex items-center gap-1.5 border border-white/15">
+                    <i class="fa-solid fa-book-open text-gold-400"></i>
+                    <span>View Active Rules</span>
+                </button>
+                <button onclick="toggleRankingsModal(true)" class="text-xs sm:text-sm px-3 py-1.5 rounded-lg bg-gold-500/20 hover:bg-gold-500/30 text-gold-300 font-semibold transition flex items-center gap-1.5 border border-gold-400/40">
+                    <i class="fa-solid fa-trophy text-gold-400"></i>
+                    <span class="hidden sm:inline">Hand Rankings</span>
+                </button>
+                <a href="winnings.html" class="text-xs sm:text-sm px-3 py-1.5 rounded-lg bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 font-semibold transition flex items-center gap-1.5 border border-emerald-400/40">
+                    <i class="fa-solid fa-money-bill-wave"></i>
+                    <span class="hidden sm:inline">Winnings</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- HERO HEADER -->
+    <header class="relative pt-8 pb-6 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto text-center">
+        <!-- Decorative Festive Badge -->
+        <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-royal-800/90 border border-gold-400/40 text-gold-300 text-xs sm:text-sm font-semibold mb-4 shadow-lg">
+            <i class="fa-solid fa-fire-flame-curved text-orange-400 diya-flame"></i>
+            <span>SHUBH DIWALI TAASH NIGHT COMPANION</span>
+            <i class="fa-solid fa-fire-flame-curved text-orange-400 diya-flame"></i>
+        </div>
+
+        <h1 class="font-display text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-amber-200 via-gold-400 to-amber-200 drop-shadow-sm">
+            Teen Patti Variations
+        </h1>
+        <p class="mt-3 max-w-2xl mx-auto text-sm sm:text-base text-amber-100/80 leading-relaxed">
+            No more arguing over rules mid-pot! Click any variation below to view step-by-step instructions, joker rules, and visual winning hand examples—or spin the wheel to pick the dealer's next call.
+        </p>
+
+        <!-- ACTION BAR: RANDOM SPINNER & QUICK STATS -->
+        <div class="mt-7 flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4">
+            <button onclick="spinRandomVariation()" id="spinBtn" class="w-full sm:w-auto px-6 py-3.5 rounded-xl bg-gradient-to-r from-amber-500 via-gold-400 to-amber-500 text-royal-950 font-extrabold text-base shadow-[0_0_25px_rgba(250,204,21,0.4)] hover:shadow-[0_0_35px_rgba(250,204,21,0.7)] hover:scale-[1.02] active:scale-95 transition-all flex items-center justify-center gap-2.5">
+                <i id="spinIcon" class="fa-solid fa-dice text-xl"></i>
+                <span>Spin for Next Round Variation!</span>
+            </button>
+
+            <button onclick="togglePotCalculatorModal(true)" class="w-full sm:w-auto px-5 py-3.5 rounded-xl bg-royal-800/80 hover:bg-royal-700/80 text-gold-200 font-semibold text-sm sm:text-base gold-border transition flex items-center justify-center gap-2">
+                <i class="fa-solid fa-coins text-gold-400"></i>
+                <span>Chaal / Blind Stakes Helper</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- FILTER & SEARCH CONTROLS -->
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-2 mb-8">
+        <div class="bg-royal-900/80 gold-border rounded-2xl p-3 sm:p-4 backdrop-blur-md flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4">
+            <!-- Category Filter Pills -->
+            <div class="flex items-center gap-2 overflow-x-auto pb-1 md:pb-0 no-scrollbar" id="categoryTabs">
+                <button onclick="setCategory('all')" data-cat="all" class="cat-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-bold whitespace-nowrap transition-all bg-gold-400 text-royal-950 shadow-md">
+                    All Variations (12)
+                </button>
+                <button onclick="setCategory('Joker')" data-cat="Joker" class="cat-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold whitespace-nowrap transition-all bg-royal-800/70 text-amber-100/80 hover:bg-royal-700 hover:text-white border border-white/10">
+                    <i class="fa-solid fa-wand-magic-sparkles text-gold-400 mr-1.5"></i>Joker Variations
+                </button>
+                <button onclick="setCategory('Extra & Community')" data-cat="Extra & Community" class="cat-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold whitespace-nowrap transition-all bg-royal-800/70 text-amber-100/80 hover:bg-royal-700 hover:text-white border border-white/10">
+                    <i class="fa-solid fa-layer-group text-emerald-400 mr-1.5"></i>Extra / Community Cards
+                </button>
+                <button onclick="setCategory('Mind Twist')" data-cat="Mind Twist" class="cat-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold whitespace-nowrap transition-all bg-royal-800/70 text-amber-100/80 hover:bg-royal-700 hover:text-white border border-white/10">
+                    <i class="fa-solid fa-bolt text-rose-400 mr-1.5"></i>Lowball & Mind Twists
+                </button>
+            </div>
+
+            <!-- Search Input -->
+            <div class="relative w-full md:w-auto md:min-w-[240px]">
+                <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-amber-200/50 text-sm"></i>
+                <input 
+                    type="text" 
+                    id="searchInput" 
+                    oninput="filterVariations()"
+                    placeholder="Search AK-47, Kiss Miss, Burst..." 
+                    class="w-full pl-10 pr-8 py-2 rounded-xl bg-royal-950/90 border border-gold-400/30 text-sm text-amber-50 placeholder-amber-200/40 focus:outline-none focus:border-gold-400"
+                >
+                <button id="clearSearchBtn" onclick="clearSearch()" class="hidden absolute right-3 top-1/2 -translate-y-1/2 text-amber-200/50 hover:text-white text-xs">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- VARIATIONS GRID -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-20">
+        <div id="variationsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+            <!-- Dynamically populated by JavaScript -->
+        </div>
+
+        <!-- Empty State -->
+        <div id="emptyState" class="hidden text-center py-16 bg-royal-900/40 rounded-2xl gold-border my-4">
+            <i class="fa-solid fa-spade text-4xl text-gold-400/50 mb-3"></i>
+            <h3 class="text-xl font-bold text-amber-100">No Matching Variations Found</h3>
+            <p class="text-sm text-amber-200/60 mt-1">Try clearing your search filter or picking another category tab.</p>
+            <button onclick="resetFilters()" class="mt-4 px-4 py-2 rounded-lg bg-gold-500 text-royal-950 font-bold text-sm">
+                Show All Variations
+            </button>
+        </div>
+    </main>
+
+    <!-- DETAILED VARIATION MODAL -->
+    <div id="variationModal" class="fixed inset-0 z-50 hidden overflow-y-auto bg-black/80 backdrop-blur-md flex items-center justify-center p-3 sm:p-6">
+        <div class="relative w-full max-w-3xl bg-gradient-to-b from-royal-900 to-royal-950 gold-border-active rounded-2xl shadow-2xl overflow-hidden my-8 max-h-[92vh] flex flex-col">
+            
+            <!-- Modal Header -->
+            <div class="px-5 py-4 sm:px-7 sm:py-5 bg-royal-800/80 border-b border-gold-400/30 flex items-start justify-between gap-4">
+                <div>
+                    <div class="flex flex-wrap items-center gap-2 mb-1.5">
+                        <span id="modalCategoryBadge" class="px-2.5 py-0.5 rounded-full text-xs font-bold uppercase tracking-wider bg-gold-400/20 text-gold-300 border border-gold-400/40"></span>
+                        <span id="modalChaosBadge" class="px-2.5 py-0.5 rounded-full text-xs font-bold uppercase tracking-wider bg-rose-500/20 text-rose-300 border border-rose-400/30"></span>
+                    </div>
+                    <h2 id="modalTitle" class="font-display text-2xl sm:text-3xl font-bold text-gold-300"></h2>
+                    <p id="modalTagline" class="text-xs sm:text-sm text-amber-100/80 mt-0.5"></p>
+                </div>
+                <button onclick="closeVariationModal()" class="p-2 rounded-xl bg-white/10 hover:bg-white/20 text-amber-100 transition shrink-0">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+
+            <!-- Modal Body (Scrollable) -->
+            <div class="p-5 sm:p-7 overflow-y-auto space-y-6">
+                
+                <!-- Quick Summary Box -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                    <div class="bg-royal-950/70 border border-gold-400/25 rounded-xl p-3.5">
+                        <div class="text-xs uppercase tracking-wider text-gold-400 font-bold flex items-center gap-1.5 mb-1">
+                            <i class="fa-solid fa-cards"></i> Cards Dealt
+                        </div>
+                        <p id="modalCardsDealt" class="text-sm sm:text-base font-semibold text-white"></p>
+                    </div>
+                    <div class="bg-royal-950/70 border border-gold-400/25 rounded-xl p-3.5">
+                        <div class="text-xs uppercase tracking-wider text-gold-400 font-bold flex items-center gap-1.5 mb-1">
+                            <i class="fa-solid fa-star"></i> Jokers
+                        </div>
+                        <p id="modalJokers" class="text-sm sm:text-base font-semibold text-amber-200"></p>
+                    </div>
+                </div>
+
+                <!-- Step-by-Step Rules -->
+                <div>
+                    <h3 class="text-sm uppercase tracking-wider text-gold-400 font-bold mb-3 flex items-center gap-2">
+                        <i class="fa-solid fa-list-check"></i> How It Works (Step-by-Step Rules)
+                    </h3>
+                    <ul id="modalRulesList" class="space-y-2.5 text-sm sm:text-base text-amber-50/90">
+                        <!-- Populated via JS -->
+                    </ul>
+                </div>
+
+                <!-- Visual Example Table Felt -->
+                <div class="bg-gradient-to-b from-felt-800 to-felt-900 rounded-2xl p-4 sm:p-5 border border-gold-400/40 shadow-inner">
+                    <div class="flex flex-wrap items-center justify-between gap-2 mb-4">
+                        <h3 class="text-sm uppercase tracking-wider text-gold-300 font-bold flex items-center gap-2">
+                            <i class="fa-solid fa-eye"></i> Visual Table Example
+                        </h3>
+                        <div class="flex flex-wrap items-center gap-2">
+                            <span class="text-xs text-emerald-200/80 bg-black/30 px-2.5 py-1 rounded-md border border-white/10">
+                                Gold glowing cards = Active Joker
+                            </span>
+                            <button onclick="dealLiveHand()" id="dealHandBtn" class="text-xs px-2.5 py-1 rounded-md bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 border border-emerald-400/40 font-semibold transition flex items-center gap-1.5">
+                                <i class="fa-solid fa-clover"></i> Deal Me a Hand
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Cards Container -->
+                    <div id="modalVisualCards" class="flex flex-wrap items-center justify-center gap-3 sm:gap-5 py-3">
+                        <!-- Rendered Playing Cards -->
+                    </div>
+
+                    <!-- Live Dealt Hand (Deck of Cards API) -->
+                    <div id="dealtHandArea" class="hidden mt-4 pt-4 border-t border-white/10">
+                        <div class="text-xs uppercase tracking-wider text-emerald-300 font-bold mb-2 text-center flex items-center justify-center gap-1.5">
+                            <i class="fa-solid fa-clover"></i> Your Deal — Live Shuffled Deck
+                        </div>
+                        <div id="modalDealtCards" class="flex flex-wrap items-center justify-center gap-3 sm:gap-5 py-1"></div>
+                    </div>
+
+                    <!-- Explanation of Visual Hand -->
+                    <div class="mt-4 bg-black/40 rounded-xl p-3.5 border border-gold-400/20 text-center">
+                        <div class="text-xs font-bold uppercase tracking-wider text-gold-400 mb-1" id="modalExampleHeading"></div>
+                        <p id="modalExampleExplanation" class="text-xs sm:text-sm text-amber-100 leading-relaxed"></p>
+                    </div>
+                </div>
+
+                <!-- Pro Tip / House Rule Note -->
+                <div class="bg-amber-500/10 border border-amber-400/30 rounded-xl p-4 flex items-start gap-3">
+                    <i class="fa-solid fa-lightbulb text-gold-400 text-lg mt-0.5"></i>
+                    <div>
+                        <h4 class="text-xs font-bold uppercase tracking-wider text-gold-300">Diwali Table Pro-Tip</h4>
+                        <p id="modalProTip" class="text-xs sm:text-sm text-amber-100/90 mt-0.5"></p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal Footer -->
+            <div class="px-5 py-4 sm:px-7 bg-royal-900 border-t border-gold-400/30 flex flex-col sm:flex-row items-center justify-between gap-3">
+                <button onclick="spinRandomVariation()" class="w-full sm:w-auto px-4 py-2.5 rounded-xl bg-white/10 hover:bg-white/15 text-amber-100 text-sm font-semibold transition flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-shuffle text-gold-400"></i>
+                    <span>Pick Another Random Game</span>
+                </button>
+                <button id="modalSelectGameBtn" class="w-full sm:w-auto px-6 py-2.5 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-white font-bold text-sm sm:text-base shadow-lg transition flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-circle-check"></i>
+                    <span>Start Round & Open Tracker</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- HAND RANKINGS REFERENCE MODAL -->
+    <div id="rankingsModal" class="fixed inset-0 z-50 hidden overflow-y-auto bg-black/80 backdrop-blur-md flex items-center justify-center p-3 sm:p-6">
+        <div class="relative w-full max-w-2xl bg-royal-900 gold-border-active rounded-2xl shadow-2xl overflow-hidden my-8 max-h-[90vh] flex flex-col">
+            <div class="px-6 py-4 bg-royal-800 border-b border-gold-400/30 flex items-center justify-between">
+                <div class="flex items-center gap-2.5">
+                    <i class="fa-solid fa-trophy text-gold-400 text-xl"></i>
+                    <h2 class="font-display text-xl sm:text-2xl font-bold text-gold-300">Standard Teen Patti Hand Rankings</h2>
+                </div>
+                <button onclick="toggleRankingsModal(false)" class="p-2 rounded-xl bg-white/10 hover:bg-white/20 text-amber-100">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div class="p-5 sm:p-6 overflow-y-auto space-y-3 text-sm">
+                <p class="text-amber-200/80 text-xs sm:text-sm mb-4">
+                    From highest to lowest (except in <strong>Muflis</strong> where this exact order is reversed!):
+                </p>
+
+                <div class="p-3.5 rounded-xl bg-royal-950/80 border border-gold-400/30 flex flex-col sm:flex-row sm:items-center justify-between gap-2 sm:gap-4">
+                    <div>
+                        <span class="px-2 py-0.5 rounded bg-gold-400 text-royal-950 font-extrabold text-xs mr-2">#1 HIGHEST</span>
+                        <strong class="text-gold-300 text-base">Trail / Trio / Set</strong>
+                        <p class="text-xs text-amber-100/70 mt-1">Three cards of the same rank. Three Aces (A-A-A) is the highest; three 2s (2-2-2) is the lowest trail.</p>
+                    </div>
+                    <div class="sm:text-right font-mono font-bold text-gold-300 shrink-0">A♠ A♥ A♦</div>
+                </div>
+
+                <div class="p-3.5 rounded-xl bg-royal-950/80 border border-white/10 flex flex-col sm:flex-row sm:items-center justify-between gap-2 sm:gap-4">
+                    <div>
+                        <span class="px-2 py-0.5 rounded bg-amber-500/20 text-gold-300 font-bold text-xs mr-2">#2</span>
+                        <strong class="text-white text-base">Pure Sequence (Pakki Rung)</strong>
+                        <p class="text-xs text-amber-100/70 mt-1">Three consecutive cards of the exact same suit. (A-K-Q is highest, followed by A-2-3).</p>
+                    </div>
+                    <div class="sm:text-right font-mono font-bold text-rose-400 shrink-0">A♥ K♥ Q♥</div>
+                </div>
+
+                <div class="p-3.5 rounded-xl bg-royal-950/80 border border-white/10 flex flex-col sm:flex-row sm:items-center justify-between gap-2 sm:gap-4">
+                    <div>
+                        <span class="px-2 py-0.5 rounded bg-amber-500/20 text-gold-300 font-bold text-xs mr-2">#3</span>
+                        <strong class="text-white text-base">Sequence (Run)</strong>
+                        <p class="text-xs text-amber-100/70 mt-1">Three consecutive cards of mixed suits.</p>
+                    </div>
+                    <div class="sm:text-right font-mono font-bold text-amber-200 shrink-0">10♠ 9♦ 8♣</div>
+                </div>
+
+                <div class="p-3.5 rounded-xl bg-royal-950/80 border border-white/10 flex flex-col sm:flex-row sm:items-center justify-between gap-2 sm:gap-4">
+                    <div>
+                        <span class="px-2 py-0.5 rounded bg-amber-500/20 text-gold-300 font-bold text-xs mr-2">#4</span>
+                        <strong class="text-white text-base">Color (Flush)</strong>
+                        <p class="text-xs text-amber-100/70 mt-1">Any three cards of the same suit, not in sequence.</p>
+                    </div>
+                    <div class="sm:text-right font-mono font-bold text-rose-400 shrink-0">K♦ J♦ 4♦</div>
+                </div>
+
+                <div class="p-3.5 rounded-xl bg-royal-950/80 border border-white/10 flex flex-col sm:flex-row sm:items-center justify-between gap-2 sm:gap-4">
+                    <div>
+                        <span class="px-2 py-0.5 rounded bg-amber-500/20 text-gold-300 font-bold text-xs mr-2">#5</span>
+                        <strong class="text-white text-base">Pair (Joot)</strong>
+                        <p class="text-xs text-amber-100/70 mt-1">Two cards of the same rank + one kicker card.</p>
+                    </div>
+                    <div class="sm:text-right font-mono font-bold text-amber-200 shrink-0">Q♠ Q♣ 7♥</div>
+                </div>
+
+                <div class="p-3.5 rounded-xl bg-royal-950/80 border border-white/10 flex flex-col sm:flex-row sm:items-center justify-between gap-2 sm:gap-4">
+                    <div>
+                        <span class="px-2 py-0.5 rounded bg-amber-500/20 text-gold-300 font-bold text-xs mr-2">#6 LOWEST</span>
+                        <strong class="text-white text-base">High Card</strong>
+                        <p class="text-xs text-amber-100/70 mt-1">Three unmatched cards. Decided by highest individual card (Ace high, 2 low).</p>
+                    </div>
+                    <div class="sm:text-right font-mono font-bold text-amber-200 shrink-0">A♠ 9♦ 4♣</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CHAAL / BLIND STAKES HELPER MODAL -->
+    <div id="potCalculatorModal" class="fixed inset-0 z-50 hidden overflow-y-auto bg-black/80 backdrop-blur-md flex items-center justify-center p-3 sm:p-6">
+        <div class="relative w-full max-w-md bg-royal-900 gold-border-active rounded-2xl shadow-2xl overflow-hidden my-8">
+            <div class="px-6 py-4 bg-royal-800 border-b border-gold-400/30 flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                    <i class="fa-solid fa-coins text-gold-400"></i>
+                    <h2 class="font-display text-lg font-bold text-gold-300">Table Stakes Reference</h2>
+                </div>
+                <button onclick="togglePotCalculatorModal(false)" class="p-2 rounded-xl bg-white/10 hover:bg-white/20 text-amber-100">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div class="p-6 space-y-4">
+                <div>
+                    <label class="block text-xs uppercase tracking-wider text-gold-400 font-bold mb-2">
+                        Set Base Boot / Blind Amount (₹)
+                    </label>
+                    <input type="number" id="bootInput" value="10" min="1" oninput="updateStakesHelper()" class="w-full px-4 py-2.5 rounded-xl bg-royal-950 border border-gold-400/40 text-lg font-bold text-gold-300 focus:outline-none">
+                </div>
+                <div class="grid grid-cols-2 gap-3 text-center">
+                    <div class="p-3 rounded-xl bg-royal-950/90 border border-white/10">
+                        <div class="text-xs text-amber-200/70">Blind Bet</div>
+                        <div id="calcBlind" class="text-xl font-extrabold text-emerald-400 mt-1">₹10</div>
+                    </div>
+                    <div class="p-3 rounded-xl bg-royal-950/90 border border-white/10">
+                        <div class="text-xs text-amber-200/70">Seen Card (Chaal)</div>
+                        <div id="calcChaal" class="text-xl font-extrabold text-gold-400 mt-1">₹20</div>
+                    </div>
+                    <div class="p-3 rounded-xl bg-royal-950/90 border border-white/10">
+                        <div class="text-xs text-amber-200/70">Max Chaal Raise (2x)</div>
+                        <div id="calcRaise" class="text-xl font-extrabold text-amber-300 mt-1">₹40</div>
+                    </div>
+                    <div class="p-3 rounded-xl bg-royal-950/90 border border-white/10">
+                        <div class="text-xs text-amber-200/70">Suggested Pot Limit</div>
+                        <div id="calcPotLimit" class="text-xl font-extrabold text-rose-400 mt-1">₹1000</div>
+                    </div>
+                </div>
+                <p class="text-xs text-amber-100/70 text-center">
+                    Remember: A Seen player must always bet <strong>2x</strong> the current Blind bet!
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ==========================================
+        // VARIATIONS DATABASE (10 Complete Variations)
+        // ==========================================
+        const variationsData = [
+            {
+                id: 'ak47',
+                name: 'AK-47',
+                tagline: 'The Undisputed King of Diwali Taash Nights',
+                category: 'Joker',
+                chaosLevel: 'High Action',
+                cardsDealt: '3 Cards (Face Down)',
+                jokers: 'All Aces (A), Kings (K), 4s, and 7s (16 Jokers in Deck)',
+                shortDesc: 'Every Ace, King, 4, and 7 of any suit acts as a joker! Expect massive trails and pure sequences almost every round.',
+                rules: [
+                    'Each player is dealt 3 standard face-down cards.',
+                    'All Aces (A), Kings (K), Fours (4), and Sevens (7) across all four suits act as Jokers.',
+                    'If you hold one of these cards, it automatically transforms into whatever rank and suit gives you the strongest possible 3-card hand.',
+                    'If you hold two or three jokers (e.g., 4♠ and 7♥ + Q♦), they combine to form a Trail of Queens (Q-Q-Q) or a Trail of Aces if all 3 are jokers!'
+                ],
+                exampleHand: [
+                    { rank: 'A', suit: '♠', isJoker: true, note: 'Joker' },
+                    { rank: '4', suit: '♥', isJoker: true, note: 'Joker' },
+                    { rank: 'J', suit: '♦', isJoker: false, note: 'Natural' }
+                ],
+                exampleHeading: 'Result: Trail of Jacks (J-J-J)',
+                exampleExplanation: 'Because A♠ and 4♥ are AK-47 jokers, both transform into Jacks to match your natural J♦, giving you a powerful Trail of Jacks!',
+                proTip: 'With 16 jokers in the 52-card deck, ordinary pairs and flushes rarely win at showdown. You typically need at least a Pure Sequence or Trail to stay in heavy Chaal betting.'
+            },
+            {
+                id: 'kiss-miss-bliss',
+                name: 'Kiss-Miss-Bliss',
+                tagline: 'Pairs, Adjacent Connectors & Picture Powers',
+                category: 'Joker',
+                chaosLevel: 'Extreme Chaos',
+                cardsDealt: '3 or 4 Cards (House Choice)',
+                jokers: 'Kiss (Pair), Miss (1-Gap Connector), Bliss (Consecutive)',
+                shortDesc: 'Two cards unlock a dynamic Joker based on how close they are, or K-Q-J grant special table powers!',
+                rules: [
+                    'Classic Table Version: Deal 4 cards to each player (or 3 cards). Two of your cards can team up to become a single Joker if they form a Kiss, Miss, or Bliss:',
+                    '• KISS (Any Pair, e.g., 8♠ 8♦): The pair merges to act as 1 Joker alongside your remaining cards.',
+                    '• MISS (1-rank gap, e.g., 6♠ 8♣ - missing 7): One of those cards transforms into a Joker!',
+                    '• BLISS (2 consecutive ranks, e.g., 9♥ 10♠): One of those cards acts as a Joker!',
+                    'Alternative Royal Action Rule: King = Joker, Queen = Free Fold & Re-buy option, Jack = Swap 1 card with the top of the deck.'
+                ],
+                exampleHand: [
+                    { rank: '9', suit: '♥', isJoker: false, note: 'Bliss Pair' },
+                    { rank: '10', suit: '♠', isJoker: true, note: 'Bliss Joker!' },
+                    { rank: 'A', suit: '♦', isJoker: false, note: 'Natural' }
+                ],
+                exampleHeading: 'Result: Bliss Triggered -> Pair of Aces or Pure Sequence!',
+                exampleExplanation: 'Since 9 and 10 are consecutive ("Bliss"), one of them becomes a joker! It can turn into an Ace to pair your A♦, or if dealt 4 cards, complete a Trail.',
+                proTip: 'Agree before the deal whether your table is playing the "Connector Joker" rule (Kiss=Pair, Miss=1-Gap, Bliss=Adjacent) or the "K-Q-J Royal Power" rule!'
+            },
+            {
+                id: '1942-love-story',
+                name: '1942: A Love Story',
+                tagline: 'Bollywood Nostalgia Meets High-Stakes Jokers',
+                category: 'Joker',
+                chaosLevel: 'High Action',
+                cardsDealt: '3 Cards (Face Down)',
+                jokers: 'All Aces (1), 9s, 4s, and 2s (16 Jokers in Deck)',
+                shortDesc: 'Named after the iconic film—Aces (representing 1), 9s, 4s, and 2s of every suit become jokers.',
+                rules: [
+                    'Deal 3 cards face down to each player at the table.',
+                    'The digits of "1-9-4-2" designate the jokers: Ace (1), Nine (9), Four (4), and Two (2).',
+                    'Since Aces are already jokers, any single Ace in your hand automatically upgrades your hand.',
+                    'Standard Teen Patti betting (Blind and Chaal) applies.'
+                ],
+                exampleHand: [
+                    { rank: '9', suit: '♣', isJoker: true, note: 'Joker (9)' },
+                    { rank: '2', suit: '♠', isJoker: true, note: 'Joker (2)' },
+                    { rank: 'K', suit: '♥', isJoker: false, note: 'Natural' }
+                ],
+                exampleHeading: 'Result: Trail of Kings (K-K-K)',
+                exampleExplanation: 'Both 9♣ and 2♠ are part of 1-9-4-2, so they act as jokers and replicate your K♥ to create a Trail of Kings!',
+                proTip: 'Watch out for players who hold three 1942 jokers—that instantly becomes a Trail of Aces (A-A-A)!'
+            },
+            {
+                id: 'muflis',
+                name: 'Muflis (Lowball)',
+                tagline: 'Poverty Rules! The Worst Hand Takes the Entire Pot',
+                category: 'Mind Twist',
+                chaosLevel: 'Mind Bender',
+                cardsDealt: '3 Cards (Face Down)',
+                jokers: 'None (Pure Inverted Rankings)',
+                shortDesc: 'Everything is upside down! The lowest, most disconnected High Card hand beats a Trail of Aces.',
+                rules: [
+                    'Deal 3 cards normally. There are NO jokers in standard Muflis.',
+                    'The hand ranking order is completely inverted: a Trail is now the worst hand, and the lowest unsuited High Card is the unbeatable champion.',
+                    'The absolute best possible hand in Muflis is 2-3-5 of mixed suits (since 2-3-4 is a Sequence, which is worse!).',
+                    'If two players both have High Card hands, the player with the lower top card wins (e.g., 7-4-2 unsuited beats 8-3-2 unsuited).'
+                ],
+                exampleHand: [
+                    { rank: '2', suit: '♠', isJoker: true, note: 'Lowest' },
+                    { rank: '3', suit: '♥', isJoker: true, note: 'Mixed Suit' },
+                    { rank: '5', suit: '♣', isJoker: true, note: 'No Run!' }
+                ],
+                exampleHeading: 'Result: 2-3-5 Off-Suit (The Ultimate Muflis Nuts!)',
+                exampleExplanation: 'Not a pair, not the same suit (Flush), and not consecutive (2-3-4 would be a Sequence). This 2-3-5 off-suit is the strongest hand in Muflis!',
+                proTip: 'Wait before celebrating low cards—make sure your 2, 3, and 4 aren’t accidentally forming a Sequence, or that all three aren’t the same suit!'
+            },
+            {
+                id: 'all-photos-joker',
+                name: 'All Photos Joker',
+                tagline: 'Every Court Card (J, Q, K) is a Joker!',
+                category: 'Joker',
+                chaosLevel: 'Maximum Action',
+                cardsDealt: '3 Cards (Face Down)',
+                jokers: 'All Jacks (J), Queens (Q), and Kings (K) (12 Jokers)',
+                shortDesc: 'Every single "Photo" (face/picture) card in the deck acts as a joker.',
+                rules: [
+                    'Each player receives 3 private cards.',
+                    'All 12 face cards—Jacks, Queens, and Kings of all suits—are jokers.',
+                    'Number cards (2 through 10) and Aces remain natural cards.',
+                    'Holding any two photo cards plus an Ace gives you an instant Trail of Aces!'
+                ],
+                exampleHand: [
+                    { rank: 'Q', suit: '♠', isJoker: true, note: 'Photo Joker' },
+                    { rank: 'J', suit: '♥', isJoker: true, note: 'Photo Joker' },
+                    { rank: '10', suit: '♠', isJoker: false, note: 'Natural' }
+                ],
+                exampleHeading: 'Result: Trail of 10s (10-10-10) or Royal Pure Sequence',
+                exampleExplanation: 'Because Queen and Jack have faces ("Photos"), both become jokers and copy your 10♠ to make a Trail of Tens!',
+                proTip: 'In All Photos Joker, an Ace in your hand is golden because any Photo card alongside it becomes another Ace.'
+            },
+            {
+                id: 'two-cards-assume-one',
+                name: 'Two Cards Assume One',
+                tagline: 'Two in the Hand, One Imagined!',
+                category: 'Extra & Community',
+                chaosLevel: 'Strategic',
+                cardsDealt: '2 Cards Dealt + 1 Assumed',
+                jokers: 'Imagined 3rd Card (everyone gets 1 invisible Joker)',
+                shortDesc: 'Each player gets only 2 cards! Mentally "assume" any 3rd card in the deck to complete your best possible 3-card hand.',
+                rules: [
+                    'Each player is dealt ONLY 2 cards face down.',
+                    'Every player mentally "assumes" any 3rd card in the deck to complete their best 3-card hand (effectively giving everyone 1 invisible Joker!).',
+                    'Your assumed card can be any rank and suit — even a card already visible on the table.',
+                    'You can ONLY claim a Trail if your 2 dealt cards are already a natural Pair!'
+                ],
+                exampleHand: [
+                    { rank: 'A', suit: '♠', isJoker: false, note: 'In Hand' },
+                    { rank: 'K', suit: '♠', isJoker: false, note: 'In Hand' },
+                    { rank: 'Q', suit: '♠', isJoker: true, note: 'Assumed' }
+                ],
+                exampleHeading: 'Result: A♠ K♠ Q♠ Pure Sequence (or A-A-K Pair)',
+                exampleExplanation: 'With A♠ and K♠ in hand, assuming the 3rd card lets you claim Q♠ for the highest Pure Sequence! (If you held a Pair of 9s in hand, your assumed 3rd card makes it a Trail of 9s!).',
+                proTip: 'In "Assume One", you can ONLY win with a Trail if your 2 dealt cards are already a natural Pair!'
+            },
+            {
+                id: 'one-card-open',
+                name: 'One Card Open (Community)',
+                tagline: 'One Shared Card Decides Everyone\'s Fate',
+                category: 'Extra & Community',
+                chaosLevel: 'Strategic',
+                cardsDealt: '2 Private Cards + 1 Open Center Card',
+                jokers: 'Shared Center Card (optional: its rank becomes a Joker)',
+                shortDesc: 'Everyone gets private cards, and 1 card is dealt face-up in the middle — all players combine their cards with the shared center card.',
+                rules: [
+                    'Each player is dealt private cards face down.',
+                    'The dealer places 1 Community Card face-up in the center of the table for everyone to see.',
+                    'Every player\'s final hand = their private cards + the 1 shared center card.',
+                    'Bonus Twist: Many families make the Center Card\'s rank a Joker for everyone at the table!'
+                ],
+                exampleHand: [
+                    { rank: 'A', suit: '♠', isJoker: false, note: 'In Hand' },
+                    { rank: 'K', suit: '♠', isJoker: false, note: 'In Hand' },
+                    { rank: 'Q', suit: '♠', isJoker: true, note: 'Center Card' }
+                ],
+                exampleHeading: 'Result: A♠ K♠ Q♠ Pure Sequence!',
+                exampleExplanation: 'The open center card is Q♠ — anyone holding A♠ K♠ instantly has the highest Pure Sequence. If your cards don\'t connect with the center card, your hand could be dead!',
+                proTip: 'Because everyone shares the same center card, hands cluster together — one lucky center card can give half the table a Sequence at once, so bet carefully!'
+            },
+            {
+                id: 'aaju-baaju-bust',
+                name: 'Aaju Baaju Bust (Neighbours + Killer Card)',
+                tagline: 'The Center Card is Out to Get You!',
+                category: 'Joker',
+                chaosLevel: 'High Volatility',
+                cardsDealt: '3 Private Cards + 1 Open Center Card',
+                jokers: 'Ranks −1 & +1 of the center card are Jokers; matching rank = instant Bust',
+                shortDesc: 'One face-up card sits in the center — hold its exact rank and you must Pack instantly, while the ranks immediately above and below it become wild Jokers!',
+                rules: [
+                    'Deal 3 private cards face-down to every player and place 1 open card face-up in the center of the table.',
+                    'The Killer / Bust Rule: Any player holding a card matching the rank of the middle open card is instantly "Busted" and must Pack immediately upon seeing their cards — no matter how strong the rest of their hand is.',
+                    'If a player plays Blind all the way into a Showdown and reveals the Bust rank, they automatically lose the Showdown.',
+                    'The Aaju-Baaju (Neighbour) Jokers: The rank immediately below (−1) and immediately above (+1) the open middle card become wild Jokers for everyone.',
+                    'Wrap-Around Rule: Ranks wrap at the ends — if an Ace is open, Aces Bust while Kings and 2s become Jokers. If a 2 is open, 2s Bust while Aces and 3s become Jokers.'
+                ],
+                centerCard: { rank: '8', suit: '♠', isBust: true, note: 'Killer / Bust Rank' },
+                exampleHand: [
+                    { rank: '7', suit: '♥', isJoker: true, note: 'Wild Joker −1' },
+                    { rank: '9', suit: '♦', isJoker: true, note: 'Wild Joker +1' },
+                    { rank: 'A', suit: '♠', isJoker: false, note: 'Kept' }
+                ],
+                exampleHeading: 'Player A: Trail of Aces (A-A-A)',
+                exampleExplanation: 'Because the middle card is an 8, all 7s and 9s are wild Jokers. Player A\'s 7♥ and 9♦ transform into two Aces, completing a Trail of Aces (A-A-A)!',
+                exampleHand2Label: 'Player B — Busted Hand',
+                exampleHand2: [
+                    { rank: 'A', suit: '♥', isJoker: false, note: 'Ace' },
+                    { rank: 'A', suit: '♣', isJoker: false, note: 'Ace' },
+                    { rank: '8', suit: '♦', isBust: true, note: 'Bust! Must Pack' }
+                ],
+                proTip: 'Even with a pair of Aces, holding the 8♦ matches the middle 8♠ Killer rank — Player B must Pack the moment they see their cards. Always check the center card before celebrating a strong hand!'
+            },
+            {
+                id: 'four-card-discard',
+                name: 'Four Card Discard (Kachha Kacha)',
+                tagline: 'Deal 4 Cards, Drop 1, Show Your Best 3',
+                category: 'Extra & Community',
+                chaosLevel: 'Balanced Skill',
+                cardsDealt: '4 Cards Dealt -> Keep Best 3',
+                jokers: 'None (unless combined with AK-47)',
+                shortDesc: 'Everyone gets 4 cards instead of 3! Discard your weakest card before showdown to craft a killer 3-card combination.',
+                rules: [
+                    'The dealer deals 4 cards face down to every player.',
+                    'Players can play Blind or look at all 4 of their cards (Chaal).',
+                    'Depending on house preference, players either discard 1 card immediately after looking at their hand, OR hold all 4 and reveal their best 3 cards at showdown.',
+                    'Having a 4th card dramatically increases the probability of Flushes, Sequences, and Pairs.'
+                ],
+                exampleHand: [
+                    { rank: '7', suit: '♥', isJoker: false, note: 'Keep' },
+                    { rank: '8', suit: '♥', isJoker: false, note: 'Keep' },
+                    { rank: '9', suit: '♥', isJoker: false, note: 'Keep' },
+                    { rank: '2', suit: '♣', isJoker: false, isDiscarded: true, note: 'Dropped' }
+                ],
+                exampleHeading: 'Result: 7♥ 8♥ 9♥ Pure Sequence (2♣ Discarded)',
+                exampleExplanation: 'You were dealt 4 cards. By dropping the useless 2♣, your remaining three cards form a clean Pure Sequence of Hearts!',
+                proTip: 'Because everyone gets an extra card, single Pairs lose much more often than in regular 3-card Teen Patti.'
+            },
+            {
+                id: 'burst',
+                name: 'Burst (Point Limit)',
+                tagline: 'Push Your Luck Without Crossing the Point Threshold!',
+                category: 'Mind Twist',
+                chaosLevel: 'High Tension',
+                cardsDealt: '3 Cards (With Point Cap / Draw Option)',
+                jokers: 'Face Cards = 0 or 0.5 Points (Point Cap Rule)',
+                shortDesc: 'A nerve-wracking Diwali twist! If your hand’s point sum exceeds the table threshold (e.g., 9.5 or 21), your hand immediately BURSTS!',
+                rules: [
+                    'Before dealing, set the Burst Threshold (most popular: 21 Points max, or 9.5 Points max).',
+                    'Card Values (21-Limit Mode): Ace = 1, Number cards (2–10) = Face Value, Picture cards (J, Q, K) = 10 points (or 0.5 in 9.5-Limit Mode).',
+                    'Variant A (Elimination Teen Patti): Standard 3-card hand rankings apply, EXCEPT any hand whose 3-card sum exceeds the Burst Limit (e.g., over 21) is an automatic "Burst" and cannot win at showdown unless bluffing everyone else into folding!',
+                    'Variant B (Draw Burst): Players start with 2 cards and may draw a 3rd card—if the total crosses the limit, they burst and pay the pot!'
+                ],
+                exampleHand: [
+                    { rank: '8', suit: '♠', isJoker: false, note: '8 Pts' },
+                    { rank: '7', suit: '♠', isJoker: false, note: '7 Pts' },
+                    { rank: '6', suit: '♠', isJoker: true, note: '6 Pts (Sum=21!)' }
+                ],
+                exampleHeading: 'Result: 8♠ 7♠ 6♠ Pure Sequence at Exactly 21 Points (Safe!)',
+                exampleExplanation: '8 + 7 + 6 = 21 Points! It stays right on the 21-point ceiling without bursting, AND forms a Pure Sequence. (Whereas K-Q-J = 30 points and would BURST!).',
+                proTip: 'If your hand bursts when you check your cards, your only way to win the pot is to bluff aggressively so every other player folds before Showdown!'
+            },
+            {
+                id: 'lowest-wild-card',
+                name: 'Lowest Joker (Muflis Joker)',
+                tagline: 'Your Lowest Card Always Has Your Back',
+                category: 'Joker',
+                chaosLevel: 'Strategic',
+                cardsDealt: '3 Cards (Face Down)',
+                jokers: 'Whichever card is the lowest rank in YOUR hand',
+                shortDesc: 'Every player gets at least one guaranteed Joker! The lowest-ranked card in your own 3-card hand becomes a joker.',
+                rules: [
+                    'Deal 3 cards to each player.',
+                    'Look at your 3 cards: whichever card has the lowest numerical rank (with 2 being lowest, Ace being highest) automatically transforms into a Joker for you!',
+                    'If your two lowest cards are tied (e.g., 4♠, 4♥, K♦), BOTH 4s become jokers and turn into Kings for a Trail of Kings!',
+                    'Because every single player has at least one joker, nobody can ever have less than a Pair!'
+                ],
+                exampleHand: [
+                    { rank: 'A', suit: '♠', isJoker: false, note: 'High' },
+                    { rank: 'Q', suit: '♠', isJoker: false, note: 'Middle' },
+                    { rank: '3', suit: '♦', isJoker: true, note: 'Lowest = Joker!' }
+                ],
+                exampleHeading: 'Result: A♠ K♠ Q♠ Pure Sequence!',
+                exampleExplanation: 'Between Ace, Queen, and 3, the 3♦ is your lowest card. It becomes a joker and transforms into K♠ to complete the highest Pure Sequence (A♠-K♠-Q♠)!',
+                proTip: 'Dealt a small pair like 5-5-J? Since the two 5s are tied as your lowest rank, BOTH become jokers and turn your hand into J-J-J!'
+            },
+            {
+                id: 'banko',
+                name: 'Banko (5-Card Power)',
+                tagline: 'Five Cards in Hand to Build Monster Combinations',
+                category: 'Extra & Community',
+                chaosLevel: 'High Action',
+                cardsDealt: '5 Cards Dealt -> Best 3 Play',
+                jokers: 'Optional 1 Center Joker',
+                shortDesc: 'Each player receives 5 private cards and selects their strongest 3-card Teen Patti combination for the showdown.',
+                rules: [
+                    'Deal 5 cards face down to each player (works best for up to 8 players).',
+                    'Players examine their 5 cards and mentally pick their strongest 3-card hand, setting 2 cards aside at showdown.',
+                    'Betting rounds proceed as Blind or Chaal.',
+                    'With 10 different 3-card combinations possible inside every 5-card hand, Pure Sequences and Trails happen frequently!'
+                ],
+                exampleHand: [
+                    { rank: 'A', suit: '♦', isJoker: false, note: 'Play' },
+                    { rank: 'A', suit: '♣', isJoker: false, note: 'Play' },
+                    { rank: 'A', suit: '♥', isJoker: true, note: 'Play' },
+                    { rank: '9', suit: '♠', isJoker: false, isDiscarded: true, note: 'Drop' },
+                    { rank: '4', suit: '♣', isJoker: false, isDiscarded: true, note: 'Drop' }
+                ],
+                exampleHeading: 'Result: Trail of Aces (Drop 9♠ & 4♣)',
+                exampleExplanation: 'Out of the 5 cards dealt to you, you keep the three Aces and discard the 9♠ and 4♣ to table an unbeatable Trail of Aces.',
+                proTip: 'If you have more than 9 players at your Diwali party, play 4-Card Discard instead so the 52-card deck doesn’t run out!'
+            }
+        ];
+
+        // ==========================================
+        // STATE MANAGEMENT
+        // ==========================================
+        let currentCategory = 'all';
+        let activeGameId = 'ak47';
+        let modalGameId = null;
+        let roundNumber = 1;
+
+        // Suit Color Helper
+        function getSuitColorClass(suit) {
+            return (suit === '♥' || suit === '♦') ? 'text-rose-600' : 'text-slate-900';
+        }
+
+        // Deck of Cards API image code helpers
+        function rankToCode(rank) {
+            return rank === '10' ? '0' : rank.charAt(0);
+        }
+        function suitToCode(suit) {
+            return { '♠': 'S', '♥': 'H', '♦': 'D', '♣': 'C' }[suit] || 'S';
+        }
+        function cardImageUrl(card) {
+            return `https://deckofcardsapi.com/static/img/${rankToCode(card.rank)}${suitToCode(card.suit)}.png`;
+        }
+
+        // Render Mini Visual Card HTML
+        function createCardHTML(card, size = 'normal') {
+            const colorClass = getSuitColorClass(card.suit);
+            const jokerClass = card.isJoker ? 'joker-glow' : '';
+            const bustClass = card.isBust ? 'bust-glow' : '';
+            const discardClass = card.isDiscarded ? 'discarded-card' : '';
+            const sizeStyle = size === 'small' ? 'width: 54px; height: 78px; padding: 4px;' : '';
+
+            return `
+                <div class="flex flex-col items-center">
+                    <div class="playing-card ${jokerClass} ${bustClass} ${discardClass}" style="${sizeStyle}">
+                        <img src="${cardImageUrl(card)}" alt="${card.rank} of ${card.suit}" draggable="false"
+                             class="absolute inset-0 w-full h-full bg-white pointer-events-none" style="border-radius: inherit;"
+                             onerror="this.remove()">
+                        <div class="flex items-center justify-between leading-none ${colorClass}">
+                            <span class="font-extrabold ${size === 'small' ? 'text-xs' : 'text-xs min-[421px]:text-sm'}">${card.rank}</span>
+                            <span class="${size === 'small' ? 'text-xs' : 'text-xs'}">${card.suit}</span>
+                        </div>
+                        <div class="text-center my-auto ${colorClass} ${size === 'small' ? 'text-xl' : 'text-2xl min-[421px]:text-3xl'} leading-none">
+                            ${card.suit}
+                        </div>
+                        <div class="flex items-center justify-between leading-none rotate-180 ${colorClass}">
+                            <span class="font-extrabold ${size === 'small' ? 'text-xs' : 'text-xs min-[421px]:text-sm'}">${card.rank}</span>
+                            <span class="${size === 'small' ? 'text-xs' : 'text-xs'}">${card.suit}</span>
+                        </div>
+                    </div>
+                    ${card.note ? `<span class="mt-1.5 text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full ${card.isBust ? 'bg-rose-600 text-white' : card.isJoker ? 'bg-gold-400 text-royal-950' : card.isDiscarded ? 'bg-rose-950 text-rose-300' : 'bg-black/40 text-amber-200/80'}">${card.note}</span>` : ''}
+                </div>
+            `;
+        }
+
+        // ==========================================
+        // RENDER VARIATIONS GRID
+        // ==========================================
+        function renderVariationsGrid() {
+            const grid = document.getElementById('variationsGrid');
+            const emptyState = document.getElementById('emptyState');
+            const searchQuery = document.getElementById('searchInput').value.trim().toLowerCase();
+            const clearBtn = document.getElementById('clearSearchBtn');
+
+            clearBtn.classList.toggle('hidden', searchQuery.length === 0);
+
+            const filtered = variationsData.filter(v => {
+                const matchesCategory = currentCategory === 'all' || v.category === currentCategory;
+                const matchesSearch = v.name.toLowerCase().includes(searchQuery) ||
+                                      v.tagline.toLowerCase().includes(searchQuery) ||
+                                      v.shortDesc.toLowerCase().includes(searchQuery) ||
+                                      v.jokers.toLowerCase().includes(searchQuery);
+                return matchesCategory && matchesSearch;
+            });
+
+            if (filtered.length === 0) {
+                grid.innerHTML = '';
+                emptyState.classList.remove('hidden');
+                return;
+            }
+
+            emptyState.classList.add('hidden');
+
+            grid.innerHTML = filtered.map(v => {
+                const isCurrentTable = v.id === activeGameId;
+                const previewCards = v.exampleHand.slice(0, 3).map(c => createCardHTML(c, 'small')).join('');
+
+                return `
+                    <article 
+                        onclick="openVariationModal('${v.id}')"
+                        class="group cursor-pointer rounded-2xl bg-gradient-to-b from-royal-800/75 to-royal-900/90 p-5 transition-all duration-300 hover:-translate-y-1.5 flex flex-col justify-between ${isCurrentTable ? 'gold-border-active' : 'gold-border hover:border-gold-400/60'}"
+                    >
+                        <div>
+                            <!-- Top Badges -->
+                            <div class="flex items-center justify-between gap-2 mb-3">
+                                <span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold uppercase tracking-wider bg-gold-500/15 text-gold-300 border border-gold-400/30">
+                                    ${v.category}
+                                </span>
+                                ${isCurrentTable ? `
+                                    <span class="px-2.5 py-0.5 rounded-full text-[11px] font-extrabold uppercase tracking-wider bg-emerald-500/20 text-emerald-300 border border-emerald-400/40 flex items-center gap-1">
+                                        <span class="h-2 w-2 rounded-full bg-emerald-400 animate-pulse"></span> Playing Now
+                                    </span>
+                                ` : `
+                                    <span class="px-2.5 py-0.5 rounded-full text-[11px] font-semibold text-amber-200/70 bg-black/30">
+                                        ${v.chaosLevel}
+                                    </span>
+                                `}
+                            </div>
+
+                            <!-- Title & Short Description -->
+                            <h2 class="font-display text-xl sm:text-2xl font-bold text-amber-100 group-hover:text-gold-300 transition">
+                                ${v.name}
+                            </h2>
+                            <p class="text-xs text-gold-400/90 font-medium mt-0.5">${v.tagline}</p>
+                            <p class="text-xs sm:text-sm text-amber-100/75 mt-2.5 line-clamp-2 leading-relaxed">
+                                ${v.shortDesc}
+                            </p>
+
+                            <!-- Mini Joker Pill -->
+                            <div class="mt-3.5 p-2.5 rounded-xl bg-royal-950/70 border border-white/10 text-xs flex items-center gap-2">
+                                <i class="fa-solid fa-wand-magic-sparkles text-gold-400 shrink-0"></i>
+                                <span class="text-amber-100/90 truncate"><strong>Joker/Twist:</strong> ${v.jokers}</span>
+                            </div>
+                        </div>
+
+                        <!-- Card Preview & Action Footer -->
+                        <div class="mt-5 pt-4 border-t border-white/10 flex items-center justify-between gap-2">
+                            <div class="flex items-center -space-x-2">
+                                ${previewCards}
+                            </div>
+                            <div class="flex flex-col items-end gap-2">
+                                <button 
+                                    onclick="event.stopPropagation(); setActiveGame('${v.id}')"
+                                    class="px-3 py-1.5 rounded-lg text-xs font-bold transition ${isCurrentTable ? 'bg-emerald-600/30 text-emerald-200 border border-emerald-400/40' : 'bg-gold-500/20 hover:bg-gold-400 hover:text-royal-950 text-gold-300 border border-gold-400/40'}"
+                                >
+                                    ${isCurrentTable ? '<i class="fa-solid fa-check mr-1"></i>Active' : 'Play This'}
+                                </button>
+                                <span class="text-xs text-gold-400 group-hover:translate-x-1 transition inline-flex items-center gap-1 font-semibold">
+                                    Rules & Example <i class="fa-solid fa-arrow-right text-[10px]"></i>
+                                </span>
+                            </div>
+                        </div>
+                    </article>
+                `;
+            }).join('');
+        }
+
+        // ==========================================
+        // MODAL & INTERACTION HANDLERS
+        // ==========================================
+        function openVariationModal(id) {
+            const v = variationsData.find(item => item.id === id);
+            if (!v) return;
+
+            document.getElementById('modalCategoryBadge').textContent = v.category;
+            document.getElementById('modalChaosBadge').textContent = v.chaosLevel;
+            document.getElementById('modalTitle').textContent = v.name;
+            document.getElementById('modalTagline').textContent = v.tagline;
+            document.getElementById('modalCardsDealt').textContent = v.cardsDealt;
+            document.getElementById('modalJokers').textContent = v.jokers;
+
+            // Rules List
+            const rulesList = document.getElementById('modalRulesList');
+            rulesList.innerHTML = v.rules.map((rule, idx) => `
+                <li class="flex items-start gap-3 bg-royal-950/50 p-3 rounded-xl border border-white/5">
+                    <span class="h-6 w-6 rounded-full bg-gold-500/20 border border-gold-400/50 text-gold-300 font-bold text-xs flex items-center justify-center shrink-0 mt-0.5">
+                        ${idx + 1}
+                    </span>
+                    <span class="leading-relaxed">${rule}</span>
+                </li>
+            `).join('');
+
+            // Visual Cards
+            const cardsContainer = document.getElementById('modalVisualCards');
+            let cardsHtml = '';
+            if (v.centerCard) {
+                cardsHtml += `
+                    <div class="w-full text-center">
+                        <div class="text-[10px] uppercase tracking-wider text-rose-400 font-bold mb-2">Middle Open Card</div>
+                        ${createCardHTML(v.centerCard, 'normal')}
+                    </div>`;
+            }
+            if (v.exampleHand2Label) {
+                cardsHtml += `<div class="w-full text-[10px] uppercase tracking-wider text-emerald-300 font-bold mt-2 text-center">${v.exampleHandLabel || 'Player A'}</div>`;
+            }
+            cardsHtml += v.exampleHand.map(c => createCardHTML(c, 'normal')).join('');
+            if (v.exampleHand2) {
+                cardsHtml += `
+                    <div class="w-full border-t border-white/10 pt-3 mt-1">
+                        <div class="text-[10px] uppercase tracking-wider text-rose-300 font-bold mb-2 text-center">${v.exampleHand2Label}</div>
+                        <div class="flex flex-wrap items-center justify-center gap-3 sm:gap-5">
+                            ${v.exampleHand2.map(c => createCardHTML(c, 'normal')).join('')}
+                        </div>
+                    </div>`;
+            }
+            cardsContainer.innerHTML = cardsHtml;
+
+            document.getElementById('modalExampleHeading').textContent = v.exampleHeading;
+            document.getElementById('modalExampleExplanation').textContent = v.exampleExplanation;
+            document.getElementById('modalProTip').textContent = v.proTip;
+
+            const selectBtn = document.getElementById('modalSelectGameBtn');
+            selectBtn.onclick = () => {
+                setActiveGame(v.id);
+                localStorage.setItem('tpAutoStart', '1');
+                location.href = 'winnings.html';
+            };
+
+            modalGameId = id;
+            document.getElementById('dealtHandArea').classList.add('hidden');
+            document.getElementById('modalDealtCards').innerHTML = '';
+            const modal = document.getElementById('variationModal');
+            modal.classList.remove('hidden');
+            modal.scrollTop = 0;
+            const modalBody = modal.querySelector('.overflow-y-auto');
+            if (modalBody) modalBody.scrollTop = 0;
+        }
+
+        function closeVariationModal() {
+            document.getElementById('variationModal').classList.add('hidden');
+        }
+
+        function openCurrentGameModal() {
+            openVariationModal(activeGameId);
+        }
+
+        function saveGameState() {
+            const v = variationsData.find(item => item.id === activeGameId);
+            localStorage.setItem('tpGameState', JSON.stringify({
+                gameId: activeGameId,
+                gameName: v ? v.name : '',
+                round: roundNumber
+            }));
+        }
+
+        function setActiveGame(id) {
+            const v = variationsData.find(item => item.id === id);
+            if (!v) return;
+            activeGameId = id;
+            document.getElementById('currentGameTitle').textContent = v.name;
+            renderVariationsGrid();
+            saveGameState();
+
+            // Subtle highlight pulse on top banner
+            const banner = document.getElementById('activeTableBanner');
+            banner.classList.add('ring-2', 'ring-gold-400');
+            setTimeout(() => banner.classList.remove('ring-2', 'ring-gold-400'), 900);
+        }
+
+        function incrementRound() {
+            roundNumber++;
+            document.getElementById('roundCounter').textContent = roundNumber;
+            saveGameState();
+        }
+
+        // Random Spinner Effect
+        function spinRandomVariation() {
+            const spinIcon = document.getElementById('spinIcon');
+            if (spinIcon) spinIcon.classList.add('fa-spin');
+            const modal = document.getElementById('variationModal');
+            const isModalOpen = !modal.classList.contains('hidden');
+            const modalShuffleIcons = modal.querySelectorAll('.fa-shuffle');
+            modalShuffleIcons.forEach(i => i.classList.add('fa-spin'));
+
+            let ticks = 0;
+            const interval = setInterval(() => {
+                const randomItem = variationsData[Math.floor(Math.random() * variationsData.length)];
+                document.getElementById('currentGameTitle').textContent = `Picking... ${randomItem.name}`;
+                if (isModalOpen) {
+                    document.getElementById('modalTitle').textContent = `Picking... ${randomItem.name}`;
+                }
+                ticks++;
+                if (ticks > 8) {
+                    clearInterval(interval);
+                    if (spinIcon) spinIcon.classList.remove('fa-spin');
+                    modalShuffleIcons.forEach(i => i.classList.remove('fa-spin'));
+                    const excludeId = isModalOpen ? (modalGameId || activeGameId) : activeGameId;
+                    const pool = variationsData.filter(v => v.id !== excludeId);
+                    const chosen = pool[Math.floor(Math.random() * pool.length)];
+                    setActiveGame(chosen.id);
+                    openVariationModal(chosen.id);
+                }
+            }, 90);
+        }
+
+        // ==========================================
+        // LIVE DECK (Deck of Cards API)
+        // ==========================================
+        let deckId = null;
+
+        async function dealLiveHand() {
+            const btn = document.getElementById('dealHandBtn');
+            const area = document.getElementById('dealtHandArea');
+            const container = document.getElementById('modalDealtCards');
+            const oldHtml = btn.innerHTML;
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Dealing...';
+            try {
+                if (!deckId) {
+                    const res = await fetch('https://deckofcardsapi.com/api/deck/new/shuffle/?deck_count=1');
+                    const data = await res.json();
+                    deckId = data.deck_id;
+                }
+                let draw = await fetch(`https://deckofcardsapi.com/api/deck/${deckId}/draw/?count=3`).then(r => r.json());
+                if (!draw.success) {
+                    await fetch(`https://deckofcardsapi.com/api/deck/${deckId}/shuffle/`);
+                    draw = await fetch(`https://deckofcardsapi.com/api/deck/${deckId}/draw/?count=3`).then(r => r.json());
+                }
+                if (!draw.success) throw new Error('Draw failed');
+                if (draw.remaining <= 2) deckId = null;
+
+                const suitMap = { SPADES: '♠', HEARTS: '♥', DIAMONDS: '♦', CLUBS: '♣' };
+                container.innerHTML = draw.cards.map(c => createCardHTML({
+                    rank: c.value === '10' ? '10' : c.value.charAt(0),
+                    suit: suitMap[c.suit] || '♠',
+                    isJoker: false,
+                    note: 'Dealt'
+                }, 'normal')).join('');
+                area.classList.remove('hidden');
+            } catch (e) {
+                container.innerHTML = '<p class="text-xs text-rose-300 py-2">Could not reach the card deck service — check your internet connection.</p>';
+                area.classList.remove('hidden');
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = oldHtml;
+            }
+        }
+
+        // Category & Search Filtering
+        function setCategory(cat) {
+            currentCategory = cat;
+            document.querySelectorAll('.cat-btn').forEach(btn => {
+                if (btn.getAttribute('data-cat') === cat) {
+                    btn.className = 'cat-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-bold whitespace-nowrap transition-all bg-gold-400 text-royal-950 shadow-md';
+                } else {
+                    btn.className = 'cat-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold whitespace-nowrap transition-all bg-royal-800/70 text-amber-100/80 hover:bg-royal-700 hover:text-white border border-white/10';
+                }
+            });
+            renderVariationsGrid();
+        }
+
+        function filterVariations() {
+            renderVariationsGrid();
+        }
+
+        function clearSearch() {
+            document.getElementById('searchInput').value = '';
+            renderVariationsGrid();
+        }
+
+        function resetFilters() {
+            document.getElementById('searchInput').value = '';
+            setCategory('all');
+        }
+
+        // Reference Modals
+        function toggleRankingsModal(show) {
+            document.getElementById('rankingsModal').classList.toggle('hidden', !show);
+        }
+
+        function togglePotCalculatorModal(show) {
+            document.getElementById('potCalculatorModal').classList.toggle('hidden', !show);
+        }
+
+        function updateStakesHelper() {
+            const boot = Math.max(1, parseInt(document.getElementById('bootInput').value) || 10);
+            document.getElementById('calcBlind').textContent = `₹${boot}`;
+            document.getElementById('calcChaal').textContent = `₹${boot * 2}`;
+            document.getElementById('calcRaise').textContent = `₹${boot * 4}`;
+            document.getElementById('calcPotLimit').textContent = `₹${boot * 100}`;
+        }
+
+        // Close modals on Escape key or backdrop click
+        window.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeVariationModal();
+                toggleRankingsModal(false);
+                togglePotCalculatorModal(false);
+            }
+        });
+
+        // Initialize on load
+        window.onload = function () {
+            try {
+                const gs = JSON.parse(localStorage.getItem('tpGameState'));
+                if (gs && variationsData.some(v => v.id === gs.gameId)) {
+                    activeGameId = gs.gameId;
+                    roundNumber = gs.round || 1;
+                    document.getElementById('currentGameTitle').textContent =
+                        variationsData.find(v => v.id === activeGameId).name;
+                    document.getElementById('roundCounter').textContent = roundNumber;
+                }
+            } catch (e) {}
+            renderVariationsGrid();
+        };
+    </script>
+</body>
+</html>
